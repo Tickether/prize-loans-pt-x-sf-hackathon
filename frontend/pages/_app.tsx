@@ -1,18 +1,18 @@
-import '@/styles/globals.css'
-import '@rainbow-me/rainbowkit/styles.css'
-import type { AppProps } from 'next/app'
+import "@/styles/globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import type { AppProps } from "next/app";
 import {
   RainbowKitProvider,
   getDefaultWallets,
   connectorsForWallets,
   Locale,
-} from '@rainbow-me/rainbowkit';
+} from "@rainbow-me/rainbowkit";
 import {
   argentWallet,
   trustWallet,
   ledgerWallet,
-} from '@rainbow-me/rainbowkit/wallets';
-import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+} from "@rainbow-me/rainbowkit/wallets";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
   mainnet,
   polygon,
@@ -21,9 +21,9 @@ import {
   base,
   zora,
   goerli,
-} from 'wagmi/chains';
-import { publicProvider } from 'wagmi/providers/public';
-import { useRouter } from 'next/router';
+} from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
+import { useRouter } from "next/router";
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -33,7 +33,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
     arbitrum,
     base,
     zora,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [goerli] : []),
+    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
   ],
   [publicProvider()]
 );
@@ -41,19 +41,19 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 const projectId = process.env.NEXT_PUBLIC_RAINBOW_PROJECT_ID;
 
 const { wallets } = getDefaultWallets({
-  appName: 'Prize Loans - PoolTogether x SuperFluid',
+  appName: "Prize Loans - PoolTogether x SuperFluid",
   projectId,
   chains,
 });
 
 const demoAppInfo = {
-  appName: 'Prize Loans - PoolTogether x SuperFluid',
+  appName: "Prize Loans - PoolTogether x SuperFluid",
 };
 
 const connectors = connectorsForWallets([
   ...wallets,
   {
-    groupName: 'Other',
+    groupName: "Other",
     wallets: [
       argentWallet({ projectId, chains }),
       trustWallet({ projectId, chains }),
