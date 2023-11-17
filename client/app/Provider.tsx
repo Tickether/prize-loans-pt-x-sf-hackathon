@@ -1,17 +1,22 @@
-import "@/styles/globals.css";
+"use client";
+import { NextUIProvider } from "@nextui-org/react";
+import React from "react";
+import { ThemeProvider } from "./providers/next-theme";
+import "@rainbow-me/rainbowkit/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import {
+  argentWallet,
+  trustWallet,
+  ledgerWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 import {
   RainbowKitProvider,
   getDefaultWallets,
   connectorsForWallets,
   Locale,
 } from "@rainbow-me/rainbowkit";
-import {
-  argentWallet,
-  trustWallet,
-  ledgerWallet,
-} from "@rainbow-me/rainbowkit/wallets";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
   mainnet,
@@ -23,8 +28,6 @@ import {
   goerli,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { useRouter } from "next/router";
-
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
@@ -38,18 +41,13 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 );
 
-const projectId = process.env.NEXT_PUBLIC_RAINBOW_PROJECT_ID;
+const projectId = process.env.NEXT_PUBLIC_RAINBOW_PROJECT_ID || "none";
 
 const { wallets } = getDefaultWallets({
   appName: "Prize Loans - PoolTogether x SuperFluid",
   projectId,
   chains,
 });
-
-const demoAppInfo = {
-  appName: "Prize Loans - PoolTogether x SuperFluid",
-};
-
 const connectors = connectorsForWallets([
   ...wallets,
   {
@@ -61,7 +59,9 @@ const connectors = connectorsForWallets([
     ],
   },
 ]);
-
+const demoAppInfo = {
+  appName: "Prize Loans - PoolTogether x SuperFluid",
+};
 const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
@@ -69,12 +69,17 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
-export default function App({ Component, pageProps }: AppProps) {
-  const { locale } = useRouter() as { locale: Locale };
+export default function Provider({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider appInfo={demoAppInfo} chains={chains} locale={locale}>
-        <Component {...pageProps} />
+      <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
+        <NextUIProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {mounted && children}
+          </ThemeProvider>
+        </NextUIProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
