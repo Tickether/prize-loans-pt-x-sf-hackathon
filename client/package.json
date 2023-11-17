@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cloudflare/next-on-pages": "^1.7.3",
     "@nextui-org/react": "^2.2.9",
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@rainbow-me/rainbowkit": "^1.2.0",
