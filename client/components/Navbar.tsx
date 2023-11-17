@@ -19,7 +19,7 @@ export default function Navbar() {
             />
           </div> */}
           <div className=" h-full font-display text-blue-200 leading-none text-xl flex flex-col items-start justify-center">
-            <p>Name</p>
+            <p>Pweethy</p>
           </div>
         </div>
         {/* logo--------- */}
