@@ -21,11 +21,17 @@ interface IFLOW {
     function getFlowInfo(ISuperToken token, address sender, address receiver) external view returns(uint256, int96, uint256, uint256);
 }
 
+interface IERC6551 {
+    function createAccount(address implementation, bytes32 salt, uint256 chainId, address tokenContract, uint256 tokenId) external view returns(address);
+    function account(address implementation, bytes32 salt, uint256 chainId, address tokenContract, uint256 tokenId) external view returns(address);
+}
+
 contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
     ITWAB collateralTokenContractTWABDelegatooor = ITWAB(0x346Df08b6B0630714C80E65f7beEFcc50b3Fc4Ec); //TWABPWeeeTHy PWeeeTH
     IFLOW flowInfoContract = IFLOW(0xff48668fa670A85e55A7a822b352d5ccF3E7b18C); //interest PWeeeTH flow info
-
+    IERC6551 erc6651RegistryContract = IERC6551(0x000000006551c19487814612e58FE06813775758); // Create Account 6651 
+   
     string public baseTokenURI;
     
     struct BorrowerInfo {
@@ -34,6 +40,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         uint256 loanAmount;
         uint256 loanInterestAmount;
         uint256 loanPayableAmount;
+        address loanPayableAddress;
         uint64 expires; // unix timestamp, user expires
     }
 
@@ -44,6 +51,8 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     address public collateralToken = 0xaD91C29732fD148616882D2B50f2D886204E570B; //PWeeeTHy
     address public loanToken = 0xB8e70B16b8d99753ce55F0E4C2A7eCeeecE30B64; //WeTH
     address public interestToken = 0xE01F8743677Da897F4e7De9073b57Bf034FC2433; //eTHX
+    address public erc6651Implementation = 0x55266d75D1a14E4572138116aF39863Ed6596E7F;//param: implementation (address) - 
+
     
     mapping (uint256  => BorrowerInfo) internal _borrowers;
 
@@ -61,36 +70,46 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     }
     // lox prize tokens and releases loan amount delegates rewards to depositer
     function collateralizedPrizeLoan(uint256 amount) external {
-         require(loansIsActive, "PWeeeTHy offline");
-        //tranfers pt tokens
-        getLoanTrackenToken();
         IERC20 collateralTokenContract = IERC20(collateralToken);
         IERC20 loanTokenContract = IERC20(loanToken);
 
-        bool transferredCollateral = collateralTokenContract.transferFrom(msg.sender, address(this), amount);
-        require(transferredCollateral, "failed collateral transfer"); 
+        uint256 loanReservers = loanTokenContract.balanceOf(address(this));
+        uint256 _loanAmount = (amount * 900 / 1000);
+        uint256 _loanInterestAmount = (amount * 34 / 1000);
 
         // timestamp for 30days multiplied by months to expire 
         uint64 loanPeriod = 12 * 2592000; 
         uint64 timestamp = uint64(block.timestamp);
         
-        //store loan info //record mapping for uncollateralization
-        BorrowerInfo storage info =  _borrowers[totalLoanSupply];
-        info.borrower = msg.sender;
-        info.collateralAmount = amount;
-        info.loanAmount = (amount * 900 / 1000);
-        info.loanInterestAmount = (amount * 34 / 1000);
-        info.loanPayableAmount = 0;
-        info.expires = loanPeriod + timestamp;
+        require(loansIsActive, "PWeeeTHy offline");
+        require(loanReservers >= _loanAmount, "little PWeeeTHy");
+        
+        //nft loan tracker with payable wallet erc6551 implementation
+        getLoanTrackenToken();
+        address loanTokenPayableAddress = erc6651RegistryContract.account(erc6651Implementation, bytes32(0), 420, address(this), totalLoanSupply - 1);
+        
+        //tranfers pt tokens
+        bool transferredCollateral = collateralTokenContract.transferFrom(msg.sender, address(this), amount);
+        require(transferredCollateral, "failed collateral transfer"); 
 
         //release loan amount(must be less the contract balance for token)
         bool transferredLoan = loanTokenContract.transferFrom(address(this), msg.sender, amount * 90);
         require(transferredLoan, "failed loan transfer");
+        
+        //store loan info //record mapping for uncollateralization
+        BorrowerInfo storage info =  _borrowers[totalLoanSupply - 1];
+        info.borrower = msg.sender;
+        info.collateralAmount = amount;
+        info.loanAmount = _loanAmount;
+        info.loanInterestAmount = _loanInterestAmount;
+        info.loanPayableAmount = 0;
+        info.loanPayableAddress = loanTokenPayableAddress;
+        info.expires = loanPeriod + timestamp;
 
         // delegate amount in mapping to borrower 
         collateralTokenContractTWABDelegatooor.createDelegation(address(this),  amount, msg.sender, uint96(loanPeriod + timestamp));
         
-        emit UpdateBorrower(totalLoanSupply, msg.sender, amount, (amount * 900 / 1000), (amount * 34 / 1000), 0, loanPeriod + timestamp);
+        emit UpdateBorrower(totalLoanSupply - 1, msg.sender, amount, (_loanAmount), (_loanInterestAmount), 0, loanTokenPayableAddress, loanPeriod + timestamp);
     }
 
 
@@ -106,9 +125,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
         info.loanPayableAmount = info.loanPayableAmount + amount;
 
-        emit UpdateBorrower(loanId, info.borrower, info.collateralAmount, info.loanInterestAmount, info.loanInterestAmount, info.loanPayableAmount, info.expires);
-        
-        
+        emit UpdateBorrower(loanId, info.borrower, info.collateralAmount, info.loanInterestAmount, info.loanInterestAmount, info.loanPayableAmount, info.loanPayableAddress, info.expires);
     }
 
     function defaultPrizeCollateral(uint256 loanId) external { 
@@ -127,17 +144,22 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
 
     function liquidaterOfCollateral(uint256 loanId) public view virtual override returns(address){
+        // check stream paid
         ISuperToken interestTokenContract = ISuperToken(interestToken);
+        (/*uint256 lastUpdated*/, /*int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, _borrowers[loanId].borrower, _borrowers[loanId].loanPayableAddress);
+        
         if( uint256(_borrowers[loanId].expires) >=  block.timestamp){
-            if (_borrowers[loanId].loanAmount >= _borrowers[loanId].loanPayableAmount) {
-                // check stream paid
-                (/*uint256 lastUpdated*/, /*int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, _borrowers[loanId].borrower, address(this));
-                if (deposit >= _borrowers[loanId].loanInterestAmount) {
-                    return  _borrowers[loanId].borrower; 
-                } else {
-                    return owner();
-                } 
-            } 
+            if (_borrowers[loanId].loanAmount >= _borrowers[loanId].loanPayableAmount && deposit >= _borrowers[loanId].loanInterestAmount) {
+                return  _borrowers[loanId].borrower; 
+            } else {
+                return owner();
+            }
+        } else {
+            if (_borrowers[loanId].loanAmount >= _borrowers[loanId].loanPayableAmount && deposit >= _borrowers[loanId].loanInterestAmount) {
+                return  _borrowers[loanId].borrower; 
+            } else {
+                return owner();
+            }
         }
     }
 
@@ -146,7 +168,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
             return  _borrowers[loanId].expires;
         }
         else{
-            return uint256(0);
+            return uint64(0);
         }
     }
 
@@ -159,7 +181,8 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
    
         totalLoanSupply += 1;
 
-        _safeMint(msg.sender, loanId);
+        _safeMint(address(this), loanId);
+        erc6651RegistryContract.createAccount(erc6651Implementation, bytes32(0), 420, address(this), loanId);
     }
 
     /// ERC721 related
@@ -197,5 +220,4 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         require(from == address(0) , "can't transfer token");
         
     }
-
 }
