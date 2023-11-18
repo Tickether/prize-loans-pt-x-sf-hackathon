@@ -56,7 +56,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     
     mapping (uint256  => BorrowerInfo) internal _borrowers;
 
-    constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
+    constructor() ERC721("PWeethy", "PWeeth") {}
 
     function flipLoanState() public onlyOwner {
         loansIsActive = !loansIsActive;
