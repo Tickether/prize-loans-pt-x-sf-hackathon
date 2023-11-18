@@ -2,6 +2,7 @@
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
+import Superfluid from "./Superfluid";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function Navbar() {
   return (
@@ -27,6 +28,7 @@ export default function Navbar() {
         <div className=" flex items-center justify-center gap-6 text-base ginto-md text-blue-200 leading-none">
           <Link href={"/"}>Home</Link>
           <Link href={"/pay"}>Borrow</Link>
+          <Superfluid />
           <Link href={"/pay"}>Borrow-History</Link>
           <Link href={"/pay"}>Repay</Link>
         </div>

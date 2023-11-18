@@ -24,9 +24,11 @@ const gintoMd = localFont({
   preload: true,
 });
 
-export const metadata: Metadata = {
-  title: "APP Name",
-  description: "App Discription",
+const metadata: Metadata = {
+  title: "Pweethy",
+  description: "Borrow WETH against pWETH",
+
+  icons: "./../public/PweethyLogo.png",
 };
 
 export default function RootLayout({
