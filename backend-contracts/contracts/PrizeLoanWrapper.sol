@@ -63,9 +63,16 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     }
 
     function supplyPrizeLoanLiquidity(uint256 amount) external onlyOwner {
-        
+        IERC20 loanTokenContract = IERC20(loanToken);
+        //release loan amount(must be less the contract balance for token)
+        bool loanSupplied = loanTokenContract.transferFrom(msg.sender, address(this), amount);
+        require(loanSupplied, "failed loan supply");
     }
     function removePrizeLoanLiquidity(uint256 amount) external onlyOwner {
+        IERC20 loanTokenContract = IERC20(loanToken);
+        //release loan amount(must be less the contract balance for token)
+        bool loanSupplied = loanTokenContract.transfer(msg.sender, amount);
+        require(loanSupplied, "failed loan unsupply");
         
     }
     // lox prize tokens and releases loan amount delegates rewards to depositer
@@ -93,7 +100,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         require(transferredCollateral, "failed collateral transfer"); 
 
         //release loan amount(must be less the contract balance for token)
-        bool transferredLoan = loanTokenContract.transferFrom(address(this), msg.sender, amount * 90);
+        bool transferredLoan = loanTokenContract.transfer(msg.sender, _loanAmount);
         require(transferredLoan, "failed loan transfer");
         
         //store loan info //record mapping for uncollateralization
@@ -107,7 +114,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         info.expires = loanPeriod + timestamp;
 
         // delegate amount in mapping to borrower 
-        collateralTokenContractTWABDelegatooor.createDelegation(address(this),  amount, msg.sender, uint96(loanPeriod + timestamp));
+        collateralTokenContractTWABDelegatooor.createDelegation(address(this), amount, msg.sender, uint96(loanPeriod + timestamp));
         
         emit UpdateBorrower(totalLoanSupply - 1, msg.sender, amount, (_loanAmount), (_loanInterestAmount), 0, loanTokenPayableAddress, loanPeriod + timestamp);
     }
@@ -134,7 +141,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         require(msg.sender == liquidatooor, "cant PWeeeTH transfer");  
 
         //release collateral amount(must be liquidatooor)
-        bool transferredLoan = collateralTokenContract.transferFrom(address(this), liquidatooor, _borrowers[loanId].collateralAmount);
+        bool transferredLoan = collateralTokenContract.transfer(liquidatooor, _borrowers[loanId].collateralAmount);
         require(transferredLoan, "failed loan transfer");     
     }
 
