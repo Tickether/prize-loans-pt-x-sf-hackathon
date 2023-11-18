@@ -20,7 +20,7 @@ interface SplineViewerProps {
 const SplineViewer: React.FC<SplineViewerProps> = ({ url, eventsTarget }) => {
   const viewerRef = useRef<HTMLDivElement | null>(null);
   const defaultUrl =
-    "https://prod.spline.design/vGPRbbU16sxjffhb/scene.splinecode";
+    "https://prod.spline.design/GH2PsLB0cwKKeEDL/scene.splinecode";
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
