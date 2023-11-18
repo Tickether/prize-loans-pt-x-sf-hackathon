@@ -82,7 +82,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
         uint256 loanReservers = loanTokenContract.balanceOf(address(this));
         uint256 _loanAmount = (amount * 900 / 1000);
-        uint256 _loanInterestAmount = (amount * 34 / 1000);
+        uint256 _loanInterestAmount = (_loanAmount * 34 / 1000);
 
         // timestamp for 30days multiplied by months to expire 
         uint64 loanPeriod = 12 * 2592000; 
@@ -151,6 +151,31 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     }
     */
 
+    function takeLoanProfits(uint256 loanId) external onlyOwner { 
+     
+        ISuperToken interestTokenContract = ISuperToken(interestToken);
+        (/*uint256 lastUpdated*/, /*int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, _borrowers[loanId].borrower, _borrowers[loanId].loanPayableAddress);
+        
+        //check if loan is expired || is paid in full
+        require((_borrowers[loanId].loanAmount >= _borrowers[loanId].loanPayableAmount && deposit >= _borrowers[loanId].loanInterestAmount) || (loanExpires(loanId) == 0), "cant PWeeeTH transfer");  
+        require(deposit > 0, "no profits");
+
+        //release interest amount(must be liquidatooor)
+        bool takenProfits = interestTokenContract.transfer( msg.sender, deposit );
+        require(takenProfits, "failed taking profits"); 
+
+        //alt tranfer from//
+        //approval of balance
+        //bool approveProfitsTaker = interestTokenContract.approve(address(this), deposit);
+        //bool takenProfits = interestTokenContract.transferFrom( _borrowers[loanId].loanPayableAddress, msg.sender, deposit);    
+    }
+
+    /*
+    //bulk takeprofitooor 
+    function takeProfitsBulk(uint256 loanId) external {
+    }
+    */
+    
 
     function liquidaterOfCollateral(uint256 loanId) public view virtual override returns(address){
         // check stream paid
