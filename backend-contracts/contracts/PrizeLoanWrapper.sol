@@ -145,9 +145,11 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         require(transferredLoan, "failed loan transfer");     
     }
 
+    /*
     //bulk liquidatooor 
     function defaultPrizeCollateralBulk(uint256 loanId) external {
     }
+    */
 
 
     function liquidaterOfCollateral(uint256 loanId) public view virtual override returns(address){
