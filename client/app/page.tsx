@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 
 export default function Home() {
   return (
-    <main className=" min-h-screen bg-black">
+    <main className=" min-h-screen bg-gradient-to-r from-purple-500 to-blue-500">
       <Navbar />
       <Header />
     </main>
