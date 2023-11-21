@@ -4,7 +4,7 @@ import Provider from "@/app/Provider";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
-
+import { Toaster } from "@/components/ui/toaster";
 const display = localFont({
   src: "../assets/fonts/gintoNord-bold.woff",
   display: "swap",
@@ -27,8 +27,6 @@ const gintoMd = localFont({
 const metadata: Metadata = {
   title: "Pweethy",
   description: "Borrow WETH against pWETH",
-
-  icons: "./../public/PweethyLogo.png",
 };
 
 export default function RootLayout({
@@ -39,11 +37,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${body.variable} ${display.variable} ${gintoMd.variable} font-body antialiased`}
+        className={`${body.variable} ${display.variable} ${gintoMd.variable}  font-body antialiased`}
       >
         <Provider>
           <Navbar />
           {children}
+          <Toaster />
         </Provider>
       </body>
     </html>
