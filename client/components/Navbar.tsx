@@ -6,8 +6,8 @@ import Superfluid from "./Superfluid";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function Navbar() {
   return (
-    <div className=" absolute top-4 w-full h-[8vh] flex items-center justify-center z-50">
-      <div className=" w-[60%] h-full bg-zinc-900 rounded-xl flex items-center justify-between px-2">
+    <div className=" fixed top-4 w-full h-[63px] flex items-center justify-center z-50">
+      <div className=" w-[60%] h-full bg-zinc-900 rounded-3xl flex items-center justify-between px-2">
         {/* logo------ */}
         <div className=" w-fit h-12 flex items-center gap-1">
           {/* <div className=" relative w-12 h-12">
@@ -27,14 +27,17 @@ export default function Navbar() {
         {/* navlinks------ */}
         <div className=" flex items-center justify-center gap-6 text-base ginto-md text-blue-200 leading-none">
           <Link href={"/"}>Home</Link>
-          <Link href={"/pay"}>Borrow</Link>
-          <Superfluid />
-          <Link href={"/pay"}>Borrow-History</Link>
-          <Link href={"/pay"}>Repay</Link>
+          <Link href={"/Borrow"}>Borrow</Link>
+          {/* <Superfluid /> */}
+          <Link href={"/BorrowHistory"}>Borrow-History</Link>
+          <Link href={"/Repay"}>Repay</Link>
         </div>
         {/* navlinks--------- */}
         {/* CTA------ */}
-        <ConnectButton />
+        <div className="mr-3">
+          <ConnectButton />
+        </div>
+
         {/* CTA--------- */}
       </div>
     </div>

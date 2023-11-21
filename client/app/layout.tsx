@@ -4,7 +4,7 @@ import Provider from "@/app/Provider";
 import localFont from "next/font/local";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
-
+import { Toaster } from "@/components/ui/toaster";
 const display = localFont({
   src: "../assets/fonts/gintoNord-bold.woff",
   display: "swap",
@@ -42,6 +42,7 @@ export default function RootLayout({
         <Provider>
           <Navbar />
           {children}
+          <Toaster />
         </Provider>
       </body>
     </html>
