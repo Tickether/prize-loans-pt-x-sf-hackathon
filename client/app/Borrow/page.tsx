@@ -92,7 +92,7 @@ export default function CardWithForm() {
 
                           console.log(e.target.value);
                           setCollatrol(e.target.value);
-                          const num = e.target.value;
+                          const num: any = e.target.value;
                           const intrestx = parseFloat(e.target.value) * 0.036; // 3.4%   90%  => 0.034 X 0.9 => 0.036
                           setLoan((num * 0.9).toString());
                           setintrest(intrestx.toString());
