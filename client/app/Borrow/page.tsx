@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordions } from "@/components/Accordation";
-
 import { useToast } from "@/components/ui/use-toast";
 
 interface collatoral {
@@ -26,9 +25,10 @@ interface collatoral {
 export default function CardWithForm() {
   const { address } = useAccount();
   const { toast } = useToast();
-  const [flowrate, setFlowRate] = React.useState("0");
-  const [collatoral, setCollatrol] = React.useState("0");
-  const [intrest, setintrest] = React.useState("0");
+  const [flowrate, setFlowRate] = React.useState("");
+  const [collatoral, setCollatrol] = React.useState("");
+  const [loan, setLoan] = React.useState("");
+  const [intrest, setintrest] = React.useState("");
 
   const { data, isError, isLoading } = useBalance({
     address: address,
@@ -83,24 +83,58 @@ export default function CardWithForm() {
                         onChange={(e) => {
                           if (e.target.value == "0" || e.target.value == "") {
                             enterMore();
-                            setFlowRate("0");
-                            setCollatrol("0");
-                            setintrest("0");
+                            setFlowRate("");
+                            setCollatrol("");
+                            setintrest("");
+                            setLoan("");
                             return;
                           }
 
                           console.log(e.target.value);
                           setCollatrol(e.target.value);
+                          const num = e.target.value;
                           const intrestx = parseFloat(e.target.value) * 0.036; // 3.4%   90%  => 0.034 X 0.9 => 0.036
+                          setLoan((num * 0.9).toString());
                           setintrest(intrestx.toString());
                           setFlowRate((intrestx / 12).toString());
                         }}
                         placeholder="enter collatoral amount"
+                        value={collatoral}
                       />
                     </div>
+                    <div className="flex flex-row justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
+                      <div className="flex items-center justify-center">
+                        <Label htmlFor="name">Loan Amount</Label>
+                      </div>
+                      <Input
+                        id="name"
+                        onChange={(e) => {
+                          if (e.target.value == "0" || e.target.value == "") {
+                            enterMore();
+                            setFlowRate("");
+                            setCollatrol("");
+                            setintrest("");
+                            setLoan("");
+                            return;
+                          }
+
+                          console.log(e.target.value);
+                          const num = parseFloat(e.target.value);
+                          setCollatrol((num * 1.11111).toString());
+
+                          const intrestx = parseFloat(e.target.value) * 0.034; // 3.4%   90%  => 0.034 X 0.9 => 0.036
+                          setLoan(e.target.value);
+                          setintrest(intrestx.toString());
+                          setFlowRate((intrestx / 12).toString());
+                        }}
+                        placeholder="enter Loan amount"
+                        value={loan}
+                      />
+                    </div>
+
                     {collatoral != "0" && collatoral != "" ? (
                       <Button className="m-3" variant="outline">
-                        Deposit {collatoral}/PWeth
+                        Deposit {collatoral}/PWeth ➡️ get {loan}/eth
                       </Button>
                     ) : (
                       <div className="text-red-500 m-3 flex justify-center">
