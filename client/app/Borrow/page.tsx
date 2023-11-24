@@ -3,7 +3,7 @@ import * as React from "react";
 import Superfluid from "@/components/Superfluid";
 import { Button } from "@/components/ui/button";
 
-import { useAccount, useBalance } from "wagmi";
+import { useAccount, useBalance, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 import {
   Card,
@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordions } from "@/components/Accordation";
 import { useToast } from "@/components/ui/use-toast";
+import { pweethyABI } from "@/utils/pweethy";
 export default function CardWithForm() {
   const { address } = useAccount();
   const { toast } = useToast();
@@ -28,7 +29,7 @@ export default function CardWithForm() {
 
   const { data, isError, isLoading } = useBalance({
     address: address,
-    token: `0x${"ad91c29732fd148616882d2b50f2d886204e570b"}`,
+    token: `0x${"EF9aFd8b3701198cCac6bf55458C38F61C4b55c4"}`,
   });
   const enterMore = React.useCallback(() => {
     toast({
@@ -49,6 +50,13 @@ export default function CardWithForm() {
       Zerobalance();
     }
   }, [data, Zerobalance]);
+
+  const { config, error } = usePrepareContractWrite({
+    address: '0x794F778358522d6071Cc5C9a6A2E23a820620708',
+    abi: pweethyABI,
+    functionName: 'collateralizedPrizeLoan',
+  })
+  const { write } = useContractWrite(config)
 
   return (
     <div className="flex justify-center pt-[5%] h-[100%]  space-y-2">
@@ -140,7 +148,7 @@ export default function CardWithForm() {
                     </div>
 
                     {flag ? (
-                      <Button className="m-3" variant="outline">
+                      <Button className="m-3" variant="outline" onClick={() => write?.()}>
                         Deposit {collatoral}/PWeth ➡️ get {loan}/eth
                       </Button>
                     ) : (
