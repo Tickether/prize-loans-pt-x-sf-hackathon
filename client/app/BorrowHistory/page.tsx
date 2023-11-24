@@ -10,6 +10,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Framework } from "@superfluid-finance/sdk-core";
+import { useEthersProvider } from "@/utils/WagmiEthersProvider";
+import { useEthersSigner } from "@/utils/WagmiEthersSigner";
 
 const BorrowDemoHistory = [
   {
@@ -37,6 +40,46 @@ const BorrowDemoHistory = [
 ];
 
 function Repay() {
+  const provider = useEthersProvider();
+  const signer = useEthersSigner();
+  async function DeleteExistingFlow(recipient: string) {
+    console.log(recipient);
+    console.log(provider);
+    console.log(signer);
+    try {
+      if (signer != undefined) {
+        const chainId = "420";
+        const sf = await Framework.create({
+          chainId: Number(chainId),
+          provider: provider,
+        });
+
+        const superSigner = sf.createSigner({ signer: signer });
+
+        console.log(signer);
+        console.log(await superSigner.getAddress());
+        const daix = await sf.loadSuperToken(
+          "0xE01F8743677Da897F4e7De9073b57Bf034FC2433"
+        );
+
+        // console.log(daix);
+        const ss = await signer.getAddress();
+        const deleteFlowOperation = daix.deleteFlow({
+          sender: await signer.getAddress(),
+          receiver: recipient,
+          // userData?: string
+        });
+
+        const result = await deleteFlowOperation.exec(superSigner);
+        console.log(result);
+
+        return result;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div className="flex justify-center flex-col gap-10 max-w-[75%]  h-[100vh]">
       {BorrowDemoHistory.map((item) => {
@@ -77,35 +120,44 @@ function Repay() {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex justify-center gap-10 border-t-2 border-red-400 pt-10 ml-[30px] text-xl font-bold ">
-                    <Button
-                      variant="success"
-                      onClick={() => {
-                        alert("hello sir");
-                      }}
-                    >
-                      Pay all at once
-                    </Button>
-                    <div className="flex flex-row gap-3 h-fit">
-                      <Input placeholder="enter partial amount" />
+                  {item.Active ? (
+                    <div className="flex justify-center gap-10 border-t-2 border-red-400 pt-10 ml-[30px] text-xl font-bold ">
                       <Button
-                        variant="secondary"
+                        variant="success"
                         onClick={() => {
                           alert("hello sir");
                         }}
                       >
-                        Pay partial
+                        Pay all at once
+                      </Button>
+                      <div className="flex flex-row gap-3 text-white h-fit">
+                        <Input placeholder="enter partial amount" />
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            alert("hello sir");
+                          }}
+                        >
+                          Pay partial
+                        </Button>
+                      </div>
+                      <Button
+                        variant="destructive"
+                        onClick={async () => {
+                          await DeleteExistingFlow(
+                            "0x861715cD400524D279Df4240a99f3C0E22b1c562"
+                          );
+                        }}
+                      >
+                        Delete Intrest Stream
                       </Button>
                     </div>
-                    <Button
-                      variant="destructive"
-                      onClick={() => {
-                        alert("hello sir");
-                      }}
-                    >
-                      Delete Intrest Stream
-                    </Button>
-                  </div>
+                  ) : (
+                    <div className="text-4xl flex items-center font-bold border-t-2 flex-col  border-black pt-10 text-black">
+                      <p>thanks for Taking loan from us 😊</p>
+                      <p>this loan is closed</p>
+                    </div>
+                  )}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
