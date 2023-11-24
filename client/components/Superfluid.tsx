@@ -8,18 +8,6 @@ import { useCallback, useMemo, useState } from "react";
 import { WidgetProps, ProductDetails } from "@superfluid-finance/widget";
 import { Button } from "@/components/ui/button";
 export default function Superfluid({ amount }: { amount: string }) {
-  const [initialChainId, setInitialChainId] = useState<number | undefined>();
-  const onPaymentOptionUpdate = useCallback<
-    Required<EventListeners>["onPaymentOptionUpdate"]
-  >(
-    (paymentOption?: PaymentOption) =>
-      setInitialChainId(paymentOption?.chainId),
-    [setInitialChainId]
-  );
-  const eventListeners = useMemo<EventListeners>(
-    () => ({ onPaymentOptionUpdate }),
-    [onPaymentOptionUpdate]
-  );
   if (amount == "" || amount == "") {
     return;
   }
@@ -61,7 +49,6 @@ export default function Superfluid({ amount }: { amount: string }) {
                 paymentDetails={paymentDetails}
                 type="drawer"
                 walletManager={walletManager}
-                eventListeners={eventListeners}
               >
                 {({ openModal }) => (
                   <Button
