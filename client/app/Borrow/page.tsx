@@ -59,8 +59,8 @@ export default function CardWithForm() {
             you can take as much as 90% of you pweth
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-row">
-          <div className="pr-14">
+        <CardContent className="flex  flex-row">
+          <div>
             {address ? (
               <form className="max-w-[400px]">
                 <div className="grid w-full items-center gap-4">
@@ -159,20 +159,23 @@ export default function CardWithForm() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end">
-                    {flag && <Superfluid amount={flowrate} />}
-                  </div>
+                  <div className="flex justify-end"></div>
                 </div>
               </form>
             ) : (
               <div>Please first connect your Wallet</div>
             )}
           </div>
+
           {/* <div className=" border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
             <img src="../c9b17b864d743c794bdc4e8227d4d427.svg" alt="" />
           </div> */}
         </CardContent>
-        <CardFooter className="flex justify-end">
+        <CardFooter className="flex  justify-center">
+          <div className=" flex  w-full justify-end pr-3  ">
+            <Superfluid amount={flowrate} />
+          </div>
+
           {/* we have to give per month amount */}
         </CardFooter>
       </Card>
