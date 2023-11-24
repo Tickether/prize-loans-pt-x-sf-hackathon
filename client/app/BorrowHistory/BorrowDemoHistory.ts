@@ -1,4 +1,4 @@
-export const RepayData = [
+export const BorrowDemoHistory = [
   {
     CollateralAmount: "10",
     LoanAmount: "9",

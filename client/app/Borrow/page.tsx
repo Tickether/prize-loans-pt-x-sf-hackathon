@@ -3,7 +3,12 @@ import * as React from "react";
 import Superfluid from "@/components/Superfluid";
 import { Button } from "@/components/ui/button";
 
-import { useAccount, useBalance, useContractWrite, usePrepareContractWrite } from "wagmi";
+import {
+  useAccount,
+  useBalance,
+  useContractWrite,
+  usePrepareContractWrite,
+} from "wagmi";
 
 import {
   Card,
@@ -52,11 +57,11 @@ export default function CardWithForm() {
   }, [data, Zerobalance]);
 
   const { config, error } = usePrepareContractWrite({
-    address: '0x794F778358522d6071Cc5C9a6A2E23a820620708',
+    address: "0x794F778358522d6071Cc5C9a6A2E23a820620708",
     abi: pweethyABI,
-    functionName: 'collateralizedPrizeLoan',
-  })
-  const { write } = useContractWrite(config)
+    functionName: "collateralizedPrizeLoan",
+  });
+  const { write } = useContractWrite(config);
 
   return (
     <div className="flex justify-center pt-[5%] h-[100%]  space-y-2">
@@ -70,7 +75,7 @@ export default function CardWithForm() {
         <CardContent className="flex  flex-row">
           <div>
             {address ? (
-              <form className="max-w-[400px]">
+              <div className="max-w-[400px]">
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
                     <Accordions
@@ -147,15 +152,22 @@ export default function CardWithForm() {
                       </div>
                     </div>
 
-                    {flag ? (
-                      <Button className="m-3" variant="outline" onClick={() => write?.()}>
-                        Deposit {collatoral}/PWeth ➡️ get {loan}/eth
-                      </Button>
-                    ) : (
-                      <div className="text-red-500 m-3 flex justify-center">
-                        ⚠️Please enter the collatoral amount
-                      </div>
-                    )}
+                    <Button
+                      className="m-3"
+                      variant="outline"
+                      onClick={() => write?.()}
+                    >
+                      {flag ? (
+                        <div>
+                          {" "}
+                          Deposit {collatoral}/PWeth ➡️ get {loan}/eth
+                        </div>
+                      ) : (
+                        <div className="text-red-500 m-3 flex justify-center">
+                          ⚠️Please enter the collatoral amount
+                        </div>
+                      )}
+                    </Button>
 
                     <Accordions
                       quetion="What is Intrest/year ?"
@@ -169,11 +181,19 @@ export default function CardWithForm() {
                         <Label>0 / eth</Label>
                       )}
                     </div>
+                    {flag && (
+                      <div className="p-3 flex justify-center gap-3 w-full">
+                        <Button variant="secondary">
+                          Claim your {loan}/eth 💵
+                        </Button>
+                        <Superfluid amount={flowrate} />
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-end"></div>
                 </div>
-              </form>
+              </div>
             ) : (
               <div>Please first connect your Wallet</div>
             )}
@@ -183,13 +203,6 @@ export default function CardWithForm() {
             <img src="../c9b17b864d743c794bdc4e8227d4d427.svg" alt="" />
           </div> */}
         </CardContent>
-        <CardFooter className="flex  justify-center">
-          <div className=" flex  w-full justify-end pr-3  ">
-            <Superfluid amount={flowrate} />
-          </div>
-
-          {/* we have to give per month amount */}
-        </CardFooter>
       </Card>
     </div>
   );
