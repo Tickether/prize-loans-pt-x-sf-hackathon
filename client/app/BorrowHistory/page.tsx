@@ -82,9 +82,10 @@ function Repay() {
 
   return (
     <div className="flex justify-center flex-col gap-10 max-w-[75%]  h-[100vh]">
-      {BorrowDemoHistory.map((item) => {
+      {BorrowDemoHistory.map((item, index) => {
         return (
           <div
+            key={index}
             className={`flex items-center ${
               item.Active ? "bg-blue-400 text-black" : "bg-red-500"
             } h-fit w-full  ml-[20%] mr-[20%] rounded-md border p-4`}
