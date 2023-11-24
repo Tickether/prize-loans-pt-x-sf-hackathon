@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: UNLICENSED
 //Code by @sliponit x @0xGeeLoko
 
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 import "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -51,15 +51,16 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     address public collateralToken = 0xEF9aFd8b3701198cCac6bf55458C38F61C4b55c4; //PWeeeTHy
     address public loanToken = 0xB8e70B16b8d99753ce55F0E4C2A7eCeeecE30B64; //WeTH
     address public interestToken = 0xE01F8743677Da897F4e7De9073b57Bf034FC2433; //eTHX
-    address public erc6651Implementation = 0x55266d75D1a14E4572138116aF39863Ed6596E7F;//param: implementation (address) - 
+    address internal erc6651Implementation = 0x55266d75D1a14E4572138116aF39863Ed6596E7F;//param: implementation (address) - 
 
     
-    mapping (uint256  => BorrowerInfo) internal _borrowers;
-    mapping (uint256  => uint64) internal loanRepayDate;
+    mapping (uint256  => BorrowerInfo) public borrowers;
+    mapping (uint256  => uint64) public loanRepayDate;
+    mapping(address => uint256[]) internal walletLoans;
 
     constructor() ERC721("PWeethy", "PWeeth") {}
 
-    function flipLoanState() public onlyOwner {
+    function flipLoanState() external onlyOwner {
         loansIsActive = !loansIsActive;
     }
 
@@ -95,7 +96,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
 
     // lox prize tokens and releases loan amount delegates rewards to depositer
-    function collateralizedPrizeLoan(uint256 amount) external {
+    function collateralizedPrizeLoan(uint256 amount) external nonReentrant {
         require(loansIsActive, "PWeeeTHy offline");
 
         IERC20 collateralTokenContract = IERC20(collateralToken);
@@ -111,6 +112,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         
         //nft loan tracker with payable wallet erc6551 implementation
         getLoanTrackenToken();
+        walletLoans[msg.sender].push(totalLoanSupply - 1);
         address loanTokenPayableAddress = erc6651RegistryContract.account(erc6651Implementation, bytes32(0), 420, address(this), totalLoanSupply - 1);
         
         //tranfers pt tokens
@@ -122,7 +124,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         require(transferredLoan, "failed loan transfer");
         
         //store loan info //record mapping for uncollateralization
-        BorrowerInfo storage info =  _borrowers[totalLoanSupply - 1];
+        BorrowerInfo storage info =  borrowers[totalLoanSupply - 1];
         info.borrower = msg.sender;
         info.collateralAmount = amount;
         info.loanAmount = _loanAmount;
@@ -138,15 +140,15 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     }
 
 
-    function payLoanAmount(uint256 amount, uint256 loanId) external {
+    function payLoanAmount(uint256 amount, uint256 loanId) external nonReentrant {
         //add you cant pay loan after one year
         //timestamp
         uint64 timestamp = uint64(block.timestamp);
 
-        require(timestamp < _borrowers[loanId].loanExpiry, "too late to pweeeeeeeeeth!"); 
-        BorrowerInfo storage info =  _borrowers[loanId];
+        require(timestamp < borrowers[loanId].loanExpiry, "too late to pweeeeeeeeeth!"); 
+        BorrowerInfo storage info =  borrowers[loanId];
 
-        require(info.loanAmountPaid + amount < info.loanAmount, "pweeeeeeeeeth!"); 
+        require(info.loanAmountPaid + amount <= info.loanAmount, "pweeeeeeeeeth!"); 
         
         IERC20 loanTokenContract = IERC20(loanToken);
 
@@ -156,7 +158,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         info.loanAmountPaid = info.loanAmountPaid + amount;
 
         
-        if (info.loanAmountPaid >= info.loanAmount) {
+        if (info.loanAmountPaid == info.loanAmount) {
             loanRepayDate[loanId] = timestamp;
         }
 
@@ -165,16 +167,16 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
 
     // take collateral
-    function defaultPrizeCollateral(uint256 loanId) external { 
+    function defaultPrizeCollateral(uint256 loanId) external nonReentrant{ 
         //timestamp
         uint64 timestamp = uint64(block.timestamp);
-        require(loanRepayDate[loanId] != 0 || _borrowers[loanId].loanExpiry < timestamp, "can't PWeeeTH yet");     
+        require(loanRepayDate[loanId] != 0 || borrowers[loanId].loanExpiry < timestamp, "can't PWeeeTH yet");     
         IERC20 collateralTokenContract = IERC20(collateralToken);
         address liquidatooor = liquidaterOfCollateral(loanId);
         require(msg.sender == liquidatooor, "cant PWeeeTH transfer");  
 
         //release collateral amount(must be liquidatooor)
-        bool transferredLoan = collateralTokenContract.transfer(liquidatooor, _borrowers[loanId].collateralAmount);
+        bool transferredLoan = collateralTokenContract.transfer(liquidatooor, borrowers[loanId].collateralAmount);
         require(transferredLoan, "failed loan transfer");     
     }
     /*
@@ -185,10 +187,10 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
 
 
     // take stream prof
-    function takeLoanProfits(uint256 loanId) external onlyOwner { 
+    function takeLoanProfits(uint256 loanId) external onlyOwner nonReentrant { 
      
         ISuperToken interestTokenContract = ISuperToken(interestToken);
-        (/*uint256 lastUpdated*/, /*int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, _borrowers[loanId].borrower, _borrowers[loanId].loanPayableAddress);
+        (/*uint256 lastUpdated*/, /*int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, borrowers[loanId].borrower, borrowers[loanId].loanPayableAddress);
         
         //release interest amount(must be liquidatooor)
         bool takenProfits = interestTokenContract.transfer( msg.sender, deposit );
@@ -197,7 +199,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         //alt tranfer from//
         //approval of balance
         //bool approveProfitsTaker = interestTokenContract.approve(address(this), deposit);
-        //bool takenProfits = interestTokenContract.transferFrom( _borrowers[loanId].loanPayableAddress, msg.sender, deposit);    
+        //bool takenProfits = interestTokenContract.transferFrom( borrowers[loanId].loanPayableAddress, msg.sender, deposit);    
     }
     /*
     //bulk takeprofitooor 
@@ -210,7 +212,7 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     function liquidaterOfCollateral(uint256 loanId) public view virtual override returns(address){
         
         ISuperToken interestTokenContract = ISuperToken(interestToken);
-        (/*uint256 lastUpdated*/,/* int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, _borrowers[loanId].borrower, _borrowers[loanId].loanPayableAddress);
+        (/*uint256 lastUpdated*/,/* int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, borrowers[loanId].borrower, borrowers[loanId].loanPayableAddress);
 
         uint64 payDate = loanRepayDate[loanId];
         uint256 expectedDeposit;
@@ -219,9 +221,9 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
             return owner();
         } else {
             // check stream paid
-            expectedDeposit = /*loanPeriod*/((payDate - _borrowers[loanId].loanDate) - 86400 /*grace period */) * /*loanInterest*/(_borrowers[loanId].loanAmount * 34 / 1000);
+            expectedDeposit = /*loanPeriod*/((payDate - borrowers[loanId].loanDate) - 86400 /*grace period */) * /*loanInterest*/(borrowers[loanId].loanAmount * 34 / 1000);
             if (deposit >= expectedDeposit) {
-                return  _borrowers[loanId].borrower;
+                return  borrowers[loanId].borrower;
             } else {
                 return owner();
             }
@@ -229,13 +231,8 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
         }
     }
 
-    function loanExpires(uint256 loanId) public view virtual override returns(uint256){
-        if( uint256(_borrowers[loanId].loanExpiry) >=  block.timestamp){
-            return  _borrowers[loanId].loanExpiry;
-        }
-        else{
-            return uint64(0);
-        }
+    function getBorrowerLoans(address borrower) external view returns (uint256[] memory) {
+        return walletLoans[borrower];
     }
 
 
