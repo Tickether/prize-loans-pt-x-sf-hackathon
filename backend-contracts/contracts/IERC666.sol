@@ -16,10 +16,5 @@ interface IERC666 {
     /// @param loanId The loan to get the user address for
     /// @return The right Of Collateral address for this Loan
     function liquidaterOfCollateral(uint256 loanId) external view returns(address);
-
-    /// @notice Get the loan expires of an NFT
-    /// @dev The zero value indicates that the loan period has expired
-    /// @param loanId The NFT to get the user expires for
-    /// @return The borrower expires for this NFT
-    function loanExpires(uint256 loanId) external view returns(uint256);
+    
 }
