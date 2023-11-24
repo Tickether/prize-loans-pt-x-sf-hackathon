@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: UNLICENSED
 //Code by @0xGeeLoko
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.19;
 
 interface IERC666 {
 

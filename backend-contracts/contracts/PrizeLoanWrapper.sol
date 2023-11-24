@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: UNLICENSED
 //Code by @sliponit x @0xGeeLoko
 
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 import "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluid.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
