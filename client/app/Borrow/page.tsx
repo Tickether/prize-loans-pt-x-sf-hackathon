@@ -2,7 +2,7 @@
 import * as React from "react";
 import Superfluid from "@/components/Superfluid";
 import { Button } from "@/components/ui/button";
-import Balance from "@/components/Balance";
+
 import { useAccount, useBalance } from "wagmi";
 
 import {
@@ -17,14 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordions } from "@/components/Accordation";
 import { useToast } from "@/components/ui/use-toast";
-
-interface collatoral {
-  data: string;
-}
-
 export default function CardWithForm() {
   const { address } = useAccount();
   const { toast } = useToast();
+  const [flag, setflag] = React.useState(false);
   const [flowrate, setFlowRate] = React.useState("");
   const [collatoral, setCollatrol] = React.useState("");
   const [loan, setLoan] = React.useState("");
@@ -34,21 +30,29 @@ export default function CardWithForm() {
     address: address,
     token: `0x${"ad91c29732fd148616882d2b50f2d886204e570b"}`,
   });
-  function enterMore() {
+  const enterMore = React.useCallback(() => {
     toast({
       variant: "destructive",
       title: "Not Enough",
       description: "Please Enter more than Zero",
     });
-  }
+  }, [toast]);
+  const Zerobalance = React.useCallback(() => {
+    toast({
+      variant: "destructive",
+      title: "Not Enough Balance",
+      description: "Please first get some token by staking in PoolTogether",
+    });
+  }, [toast]);
   React.useEffect(() => {
     if (data?.formatted == "0") {
-      enterMore();
+      Zerobalance();
     }
-  }, [data]);
+  }, [data, Zerobalance]);
+
   return (
     <div className="flex justify-center pt-[10%] h-[100%]  ">
-      <Card className="w-[80%] max-w-[70%] min-h-[400px]  h-fit mb-[6%] border-solid border-2 border-purple-500 max-h-[70%]">
+      <Card className="w-fit max-w-[70%] min-h-[400px]  h-fit mb-[6%] border-solid border-2 border-purple-500 max-h-[70%]">
         <CardHeader>
           <CardTitle>Borrow Against PWETH</CardTitle>
           <CardDescription>
@@ -56,7 +60,7 @@ export default function CardWithForm() {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-row">
-          <div className="max-w-[600px]  pr-14">
+          <div className="pr-14">
             {address ? (
               <form className="max-w-[400px]">
                 <div className="grid w-full items-center gap-4">
@@ -68,7 +72,6 @@ export default function CardWithForm() {
                     <div className="flex flex-row border-solid border-2 m-3 p-3 rounded-2xl border-sky-500 justify-between">
                       <Label htmlFor="name">Collatoral balance</Label>
                       {data?.formatted} PWeth
-                      {/* <Balance token="0xaD91C29732fD148616882D2B50f2D886204E570B" /> */}
                     </div>
                     <Accordions
                       quetion="What is Collatoral Amount ?"
@@ -83,9 +86,8 @@ export default function CardWithForm() {
                         onChange={(e) => {
                           if (e.target.value == "0" || e.target.value == "") {
                             enterMore();
-                            setFlowRate("");
+                            setflag(false);
                             setCollatrol("");
-                            setintrest("");
                             setLoan("");
                             return;
                           }
@@ -97,6 +99,7 @@ export default function CardWithForm() {
                           setLoan((num * 0.9).toString());
                           setintrest(intrestx.toString());
                           setFlowRate((intrestx / 12).toString());
+                          setflag(true);
                         }}
                         placeholder="enter collatoral amount"
                         value={collatoral}
@@ -111,10 +114,9 @@ export default function CardWithForm() {
                         onChange={(e) => {
                           if (e.target.value == "0" || e.target.value == "") {
                             enterMore();
-                            setFlowRate("");
-                            setCollatrol("");
-                            setintrest("");
+                            setflag(false);
                             setLoan("");
+                            setCollatrol("");
                             return;
                           }
 
@@ -126,13 +128,14 @@ export default function CardWithForm() {
                           setLoan(e.target.value);
                           setintrest(intrestx.toString());
                           setFlowRate((intrestx / 12).toString());
+                          setflag(true);
                         }}
                         placeholder="enter Loan amount"
                         value={loan}
                       />
                     </div>
 
-                    {collatoral != "0" && collatoral != "" ? (
+                    {flag ? (
                       <Button className="m-3" variant="outline">
                         Deposit {collatoral}/PWeth ➡️ get {loan}/eth
                       </Button>
@@ -148,7 +151,7 @@ export default function CardWithForm() {
                     />
                     <div className="flex justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
                       <Label>Interest/year </Label>
-                      {intrest ? (
+                      {flag ? (
                         <Label> {intrest.slice(0, 8)} / eth</Label>
                       ) : (
                         <Label>0 / eth</Label>
@@ -157,7 +160,7 @@ export default function CardWithForm() {
                   </div>
 
                   <div className="flex justify-end">
-                    {flowrate != "0" && <Superfluid amount={flowrate} />}
+                    {flag && <Superfluid amount={flowrate} />}
                   </div>
                 </div>
               </form>
