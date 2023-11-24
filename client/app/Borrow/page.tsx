@@ -51,7 +51,7 @@ export default function CardWithForm() {
   }, [data, Zerobalance]);
 
   return (
-    <div className="flex justify-center pt-[10%] h-[100%]  ">
+    <div className="flex justify-center pt-[5%] h-[100%]  space-y-2">
       <Card className="w-fit max-w-[70%] min-h-[400px]  h-fit mb-[6%] border-solid border-2 border-purple-500 max-h-[70%]">
         <CardHeader>
           <CardTitle>Borrow Against PWETH</CardTitle>
@@ -77,62 +77,66 @@ export default function CardWithForm() {
                       quetion="What is Collatoral Amount ?"
                       ans="Collatoral Amount is amount of token which you want to stake in our smartcontract for loan you can take loan as much as 90%"
                     />
-                    <div className="flex flex-row justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
-                      <div className="flex items-center justify-center">
-                        <Label htmlFor="name">Collatoral Amount</Label>
+                    <div className="border-solid border-2  rounded-2xl border-sky-500">
+                      <div className="flex flex-row justify-between m-3 p-3 ">
+                        <div className="flex items-center justify-center">
+                          <Label htmlFor="name">Collatoral Amount</Label>
+                        </div>
+                        <Input
+                          id="name"
+                          onChange={(e) => {
+                            if (e.target.value == "0" || e.target.value == "") {
+                              enterMore();
+                              setflag(false);
+                              setCollatrol("");
+                              setLoan("");
+                              return;
+                            }
+
+                            console.log(e.target.value);
+                            setCollatrol(e.target.value);
+                            const num: any = e.target.value;
+                            const intrestx = parseFloat(e.target.value) * 0.036; // 3.4%   90%  => 0.034 X 0.9 => 0.036
+                            setLoan((num * 0.9).toString());
+                            setintrest(intrestx.toString());
+                            setFlowRate((intrestx / 12).toString());
+                            setflag(true);
+                          }}
+                          placeholder="enter collatoral amount"
+                          value={collatoral}
+                        />
                       </div>
-                      <Input
-                        id="name"
-                        onChange={(e) => {
-                          if (e.target.value == "0" || e.target.value == "") {
-                            enterMore();
-                            setflag(false);
-                            setCollatrol("");
-                            setLoan("");
-                            return;
-                          }
+                      {}
+                      <div className="border-b-4 border-sky-500"></div>
+                      <div className="flex flex-row justify-between  m-3 p-3 ">
+                        <div className="flex items-center justify-center">
+                          <Label htmlFor="name">Loan Amount</Label>
+                        </div>
+                        <Input
+                          id="name"
+                          onChange={(e) => {
+                            if (e.target.value == "0" || e.target.value == "") {
+                              enterMore();
+                              setflag(false);
+                              setLoan("");
+                              setCollatrol("");
+                              return;
+                            }
 
-                          console.log(e.target.value);
-                          setCollatrol(e.target.value);
-                          const num: any = e.target.value;
-                          const intrestx = parseFloat(e.target.value) * 0.036; // 3.4%   90%  => 0.034 X 0.9 => 0.036
-                          setLoan((num * 0.9).toString());
-                          setintrest(intrestx.toString());
-                          setFlowRate((intrestx / 12).toString());
-                          setflag(true);
-                        }}
-                        placeholder="enter collatoral amount"
-                        value={collatoral}
-                      />
-                    </div>
-                    <div className="flex flex-row justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
-                      <div className="flex items-center justify-center">
-                        <Label htmlFor="name">Loan Amount</Label>
+                            console.log(e.target.value);
+                            const num = parseFloat(e.target.value);
+                            setCollatrol((num * 1.11111).toString());
+
+                            const intrestx = parseFloat(e.target.value) * 0.034; // 3.4%   90%  => 0.034 X 0.9 => 0.036
+                            setLoan(e.target.value);
+                            setintrest(intrestx.toString());
+                            setFlowRate((intrestx / 12).toString());
+                            setflag(true);
+                          }}
+                          placeholder="enter Loan amount"
+                          value={loan}
+                        />
                       </div>
-                      <Input
-                        id="name"
-                        onChange={(e) => {
-                          if (e.target.value == "0" || e.target.value == "") {
-                            enterMore();
-                            setflag(false);
-                            setLoan("");
-                            setCollatrol("");
-                            return;
-                          }
-
-                          console.log(e.target.value);
-                          const num = parseFloat(e.target.value);
-                          setCollatrol((num * 1.11111).toString());
-
-                          const intrestx = parseFloat(e.target.value) * 0.034; // 3.4%   90%  => 0.034 X 0.9 => 0.036
-                          setLoan(e.target.value);
-                          setintrest(intrestx.toString());
-                          setFlowRate((intrestx / 12).toString());
-                          setflag(true);
-                        }}
-                        placeholder="enter Loan amount"
-                        value={loan}
-                      />
                     </div>
 
                     {flag ? (
