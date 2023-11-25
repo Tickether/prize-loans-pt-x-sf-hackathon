@@ -8,7 +8,7 @@ interface IERC666 {
     // Logged when the user of an NFT is changed or expires is changed
     /// @notice Emitted when the `borrower` of an NFT or the `expires` of the `borrower` is changed
     /// The zero address for user indicates that there is no user address
-    event UpdateBorrower(uint256 indexed loanId, address indexed borrower, uint256 collateralAmount, uint256 loanAmount, uint256 loanPayableAmount, address loanPayableAddress, uint64 loanDate, uint64 loanExpires);
+    event UpdateBorrower(uint256 loanId, address borrower, uint256 collateralAmount, uint256 loanAmount, uint256 loanPayableAmount, address loanPayableAddress, uint64 loanDate, uint64 loanExpires);
 
 
     /// @notice Get the right Of Collateral address of an Loan
