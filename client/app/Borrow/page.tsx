@@ -2,19 +2,19 @@
 import * as React from "react";
 import Superfluid from "@/components/Superfluid";
 import { Button } from "@/components/ui/button";
-
+import { useMyContext } from "../AppContext";
 import {
   useAccount,
   useBalance,
   useContractWrite,
   usePrepareContractWrite,
 } from "wagmi";
-
+import { Deposit } from "@/components/Deposite";
+import Approve from "@/components/Approve";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -31,11 +31,13 @@ export default function CardWithForm() {
   const [collatoral, setCollatrol] = React.useState("");
   const [loan, setLoan] = React.useState("");
   const [intrest, setintrest] = React.useState("");
+  const { flagDeposit, setFlagDeposit } = useMyContext();
 
   const { data, isError, isLoading } = useBalance({
     address: address,
     token: `0x${"EF9aFd8b3701198cCac6bf55458C38F61C4b55c4"}`,
   });
+
   const enterMore = React.useCallback(() => {
     toast({
       variant: "destructive",
@@ -84,7 +86,7 @@ export default function CardWithForm() {
                     />
                     <div className="flex flex-row border-solid border-2 m-3 p-3 rounded-2xl border-sky-500 justify-between">
                       <Label htmlFor="name">Collatoral balance</Label>
-                      {data?.formatted} PWeth
+                      {data?.formatted?.slice(0, 10)} PWeth
                     </div>
                     <Accordions
                       quetion="What is Collatoral Amount ?"
@@ -152,22 +154,19 @@ export default function CardWithForm() {
                       </div>
                     </div>
 
-                    <Button
-                      className="m-3"
-                      variant="outline"
-                      onClick={() => write?.()}
-                    >
-                      {flag ? (
-                        <div>
-                          {" "}
-                          Deposit {collatoral}/PWeth ➡️ get {loan}/eth
-                        </div>
-                      ) : (
-                        <div className="text-red-500 m-3 flex justify-center">
-                          ⚠️Please enter the collatoral amount
-                        </div>
-                      )}
-                    </Button>
+                    {flag ? (
+                      <div className="w-full">
+                        {!flagDeposit ? (
+                          <Approve amount={collatoral} />
+                        ) : (
+                          <Deposit collatoral={collatoral} loan={loan} />
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-red-500 m-3 flex justify-center">
+                        ⚠️Please enter the collatoral amount
+                      </div>
+                    )}
 
                     <Accordions
                       quetion="What is Intrest/year ?"
@@ -198,10 +197,6 @@ export default function CardWithForm() {
               <div>Please first connect your Wallet</div>
             )}
           </div>
-
-          {/* <div className=" border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
-            <img src="../c9b17b864d743c794bdc4e8227d4d427.svg" alt="" />
-          </div> */}
         </CardContent>
       </Card>
     </div>

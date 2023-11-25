@@ -6,6 +6,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
+import { MyContextProvider } from "./AppContext";
 import {
   argentWallet,
   trustWallet,
@@ -63,14 +64,16 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
-        <NextUIProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {mounted && children}
-          </ThemeProvider>
-        </NextUIProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <MyContextProvider>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
+          <NextUIProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              {mounted && children}
+            </ThemeProvider>
+          </NextUIProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </MyContextProvider>
   );
 }
