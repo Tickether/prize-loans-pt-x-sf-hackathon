@@ -18,7 +18,7 @@ interface ITWAB {
 }
 
 interface IFLOW {
-    function getFlowInfo(ISuperToken token, address sender, address receiver) external view returns(uint256, int96, uint256, uint256);
+    function getFlow(ISuperToken token, address sender, address receiver) external view returns(uint256, int96, uint256, uint256);
 }
 
 interface IERC6551 {
@@ -200,12 +200,16 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     }
     */
 
+    function getDepositedFlow(uint256 loanId) public view returns (uint256){
+        (/*uint256 lastUpdated*/,/* int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlow(interestTokenContract, borrowers[loanId].borrower, borrowers[loanId].loanPayableAddress);
+        return deposit;
+    }
 
     // take stream prof
     function takeLoanProfits(uint256 loanId) external onlyOwner { 
      
        
-        (/*uint256 lastUpdated*/, /*int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, borrowers[loanId].borrower, borrowers[loanId].loanPayableAddress);
+        uint256 deposit = getDepositedFlow(loanId);
         
         //release interest amount(must be liquidatooor)
         bool takenProfits = interestTokenContract.transfer( msg.sender, deposit );
@@ -221,28 +225,30 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     function takeProfitsBulk(uint256 loanId) external {
     }
     */
-    
+
 
     // who gets right to collateral after loan repay or expiry
     function liquidaterOfCollateral(uint256 loanId) public view virtual override returns(address){
         
-        (/*uint256 lastUpdated*/,/* int96 flowRate*/, uint256 deposit, /*uint256 owedDeposit*/) = flowInfoContract.getFlowInfo(interestTokenContract, borrowers[loanId].borrower, borrowers[loanId].loanPayableAddress);
-
         uint64 payDate = loanRepayDate[loanId];
-        uint256 expectedDeposit;
-
+        
         if (payDate == 0) {
             return owner();
         } else {
+            
+            uint256 loanInterest = borrowers[loanId].loanAmount * 34 / 1000;
+            uint64 loanGraceDate = borrowers[loanId].loanDate - uint64(86400); /*grace period */
+            uint64 loanPeriod = payDate - loanGraceDate;
+            uint256 expectedDeposit = uint256(loanPeriod) * loanInterest; 
+            uint256 deposit = getDepositedFlow(loanId);
             // check stream paid
-            expectedDeposit = /*loanPeriod*/((payDate - borrowers[loanId].loanDate) - 86400 /*grace period */) * /*loanInterest*/(borrowers[loanId].loanAmount * 34 / 1000);
             if (deposit >= expectedDeposit) {
                 return  borrowers[loanId].borrower;
             } else {
                 return owner();
             }
-                
         }
+        
     }
 
     function getBorrowerLoans(address borrower) external view returns (uint256[] memory) {
