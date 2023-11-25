@@ -52,7 +52,7 @@ export default function Superfluid({ amount }: { amount: string }) {
               >
                 {({ openModal }) => (
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={(e) => {
                       openModal();
                     }}

@@ -30,7 +30,7 @@ export default function Navbar() {
           <Link href={"/Borrow"}>Borrow</Link>
           {/* <Superfluid /> */}
           <Link href={"/BorrowHistory"}>Borrow-History</Link>
-          <Link href={"/RepayLoan"}>Repay</Link>
+          {/* <Link href={"/RepayLoan"}>Repay</Link> */}
         </div>
         {/* navlinks--------- */}
         {/* CTA------ */}
