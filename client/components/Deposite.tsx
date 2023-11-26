@@ -3,17 +3,14 @@ import * as React from "react";
 import { useContractWrite } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { pweethyABI } from "@/utils/pweethy";
-import { divider } from "@nextui-org/react";
+import { useMyContext } from "@/app/AppContext";
+import { useToast } from "./ui/use-toast";
 
-export function Deposit({
-  collatoral,
-  loan,
-}: {
-  collatoral: string;
-  loan: string;
-}) {
+export function Deposit({ collatoral }: { collatoral: string }) {
+  const { toast } = useToast();
+
   const { data, isLoading, isSuccess, write, error } = useContractWrite({
-    address: "0x7C5dfc974D51069de0646F2A9cd50434eDa9433c",
+    address: "0x4EC74b34dd8190f02E7d13e00393716981b2BADE",
     abi: pweethyABI,
     functionName: "collateralizedPrizeLoan",
   });
@@ -26,27 +23,27 @@ export function Deposit({
     );
   }
 
-  if (isSuccess) {
-    <div className="flex justify-center m-3 border-solid border-2 p-3 border-white rounded-2xl">
-      Loan completed check your wallet and also start paying stream
-    </div>;
+  if (error) {
+    console.log(data);
+    toast({
+      title: "There is some error Please Refresh page and try again",
+      variant: "destructive",
+    });
   }
-  console.log(parseInt(collatoral) * 1000000000000000000);
+
+  if (isSuccess) {
+    console.log(data);
+    return <div>Completed</div>;
+  }
+  function handleClick() {
+    write({
+      args: [BigInt(parseFloat(collatoral) * 1000000000000000000)],
+    });
+  }
+  console.log(parseFloat(collatoral) * 1000000000000000000);
   return (
-    <Button
-      className="m-3 w-full"
-      variant="outline"
-      onClick={() => {
-        try {
-          write({
-            args: [BigInt(parseInt(collatoral) * 1000000000000000000)],
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }}
-    >
-      Deposit {collatoral}/PWeth ➡️ get {loan}/eth
+    <Button className="m-3 w-full" variant="outline" onClick={handleClick}>
+      Deposit {collatoral}/PWeth ➡️ get {parseFloat(collatoral) * 0.9}/eth
     </Button>
   );
 }

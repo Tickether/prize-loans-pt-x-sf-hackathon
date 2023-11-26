@@ -1,13 +1,19 @@
 "use client";
 import { ConnectButton, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import SuperfluidWidget, {
-  EventListeners,
-  PaymentOption,
+  WidgetProps,
+  ProductDetails,
 } from "@superfluid-finance/widget";
-import { useCallback, useMemo, useState } from "react";
-import { WidgetProps, ProductDetails } from "@superfluid-finance/widget";
+
+import { ThemeOptions } from "@mui/material";
 import { Button } from "@/components/ui/button";
-export default function Superfluid({ amount }: { amount: string }) {
+export default function Superfluid({
+  amount,
+  reciver,
+}: {
+  amount: string;
+  reciver: string;
+}) {
   if (amount == "" || amount == "") {
     return;
   }
@@ -15,7 +21,7 @@ export default function Superfluid({ amount }: { amount: string }) {
   const paymentDetails: WidgetProps["paymentDetails"] = {
     paymentOptions: [
       {
-        receiverAddress: "0xf26ce9749f29e61c25d0333bce2301cb2dfd3a22",
+        receiverAddress: reciver,
         chainId: 420,
         superToken: {
           address: "0xE01F8743677Da897F4e7De9073b57Bf034FC2433",
@@ -33,6 +39,46 @@ export default function Superfluid({ amount }: { amount: string }) {
     description: "Start Payment of 3.4% of Total loan  amount",
     imageURI: "",
   };
+  const thems: ThemeOptions = {
+    typography: {
+      fontFamily: "'Noto Sans', 'sans-serif'",
+    },
+    palette: {
+      mode: "light",
+      primary: {
+        main: "rgb(20, 191, 228)",
+      },
+      secondary: {
+        main: "rgb(202, 162, 226)",
+      },
+    },
+    shape: {
+      borderRadius: 20,
+    },
+    components: {
+      MuiStepIcon: {
+        styleOverrides: {
+          text: {
+            fill: "rgb(202, 162, 226)",
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            borderRadius: 10,
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: 10,
+          },
+        },
+      },
+    },
+  };
 
   return (
     <>
@@ -47,17 +93,19 @@ export default function Superfluid({ amount }: { amount: string }) {
               <SuperfluidWidget
                 productDetails={productDetails}
                 paymentDetails={paymentDetails}
-                type="drawer"
+                type="dialog"
+                theme={thems}
                 walletManager={walletManager}
               >
                 {({ openModal }) => (
                   <Button
+                    className="m-3 w-full"
                     variant="secondary"
                     onClick={(e) => {
                       openModal();
                     }}
                   >
-                    Pay Stream
+                    Start your Intrest payment💵
                   </Button>
                 )}
               </SuperfluidWidget>

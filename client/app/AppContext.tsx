@@ -10,8 +10,11 @@ import React, {
 
 interface MyContextProps {
   flagDeposit: boolean;
-
   setFlagDeposit: Dispatch<SetStateAction<boolean>>;
+  txhash: string;
+  setTxhash: Dispatch<SetStateAction<string>>;
+  flagApprove: boolean;
+  setFlagApprove: Dispatch<SetStateAction<boolean>>;
 }
 
 const MyContext = createContext<MyContextProps | undefined>(undefined);
@@ -22,9 +25,15 @@ interface MyContextProviderProps {
 
 export function MyContextProvider({ children }: MyContextProviderProps) {
   const [flagDeposit, setFlagDeposit] = useState<boolean>(false);
+  const [txhash, setTxhash] = useState<string>("");
+  const [flagApprove, setFlagApprove] = useState<boolean>(true);
 
   const contextValue: MyContextProps = {
     flagDeposit,
+    flagApprove,
+    txhash,
+    setTxhash,
+    setFlagApprove,
 
     setFlagDeposit,
   };

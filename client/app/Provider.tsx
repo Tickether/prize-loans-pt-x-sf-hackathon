@@ -64,16 +64,16 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
   return (
-    <MyContextProvider>
-      <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
+    <WagmiConfig config={wagmiConfig}>
+      <RainbowKitProvider chains={chains} appInfo={demoAppInfo}>
+        <MyContextProvider>
           <NextUIProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {mounted && children}
             </ThemeProvider>
           </NextUIProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </MyContextProvider>
+        </MyContextProvider>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }

@@ -1,16 +1,16 @@
 "use client";
 import * as React from "react";
-import Superfluid from "@/components/Superfluid";
-import { Button } from "@/components/ui/button";
+
 import { useMyContext } from "../AppContext";
 import {
   useAccount,
   useBalance,
   useContractWrite,
+  useContractRead,
   usePrepareContractWrite,
+  erc20ABI,
 } from "wagmi";
-import { Deposit } from "@/components/Deposite";
-import Approve from "@/components/Approve";
+import BorrowButton from "@/components/MainBorrowButton";
 import {
   Card,
   CardContent,
@@ -22,16 +22,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordions } from "@/components/Accordation";
 import { useToast } from "@/components/ui/use-toast";
-import { pweethyABI } from "@/utils/pweethy";
+
 export default function CardWithForm() {
   const { address } = useAccount();
   const { toast } = useToast();
   const [flag, setflag] = React.useState(false);
-  const [flowrate, setFlowRate] = React.useState("");
   const [collatoral, setCollatrol] = React.useState("");
   const [loan, setLoan] = React.useState("");
   const [intrest, setintrest] = React.useState("");
-  const { flagDeposit, setFlagDeposit } = useMyContext();
 
   const { data, isError, isLoading } = useBalance({
     address: address,
@@ -44,26 +42,54 @@ export default function CardWithForm() {
       title: "Not Enough",
       description: "Please Enter more than Zero",
     });
-  }, [toast]);
+  }, []);
+
   const Zerobalance = React.useCallback(() => {
     toast({
       variant: "destructive",
       title: "Not Enough Balance",
       description: "Please first get some token by staking in PoolTogether",
     });
-  }, [toast]);
+  }, [data]);
+
   React.useEffect(() => {
     if (data?.formatted == "0") {
       Zerobalance();
     }
   }, [data, Zerobalance]);
 
-  const { config, error } = usePrepareContractWrite({
-    address: "0x794F778358522d6071Cc5C9a6A2E23a820620708",
-    abi: pweethyABI,
-    functionName: "collateralizedPrizeLoan",
-  });
-  const { write } = useContractWrite(config);
+  function HandleLoan(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.value == "0" || e.target.value == "") {
+      enterMore();
+      setflag(false);
+      setLoan("");
+      setCollatrol("");
+      return;
+    }
+    setCollatrol((parseFloat(e.target.value) * 1.11111).toString());
+    setLoan(e.target.value);
+    setintrest(
+      (parseFloat(e.target.value) * 0.034).toString() // 3.4%   90%  => 0.034 X 0.9 => 0.036
+    );
+    setflag(true);
+  }
+  function HandleCollatoral(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.value == "0" || e.target.value == "") {
+      enterMore();
+      setflag(false);
+      setCollatrol("");
+      setLoan("");
+      return;
+    }
+
+    setCollatrol(e.target.value);
+    setLoan((parseFloat(e.target.value) * 0.9).toString());
+    setintrest(
+      (parseFloat(e.target.value) * 0.036).toString() // 3.4%   90%  => 0.034 X 0.9 => 0.036
+    );
+
+    setflag(true);
+  }
 
   return (
     <div className="flex justify-center pt-[5%] h-[100%]  space-y-2">
@@ -77,7 +103,7 @@ export default function CardWithForm() {
         <CardContent className="flex  flex-row">
           <div>
             {address ? (
-              <div className="max-w-[400px]">
+              <div className="max-w-[700px] w-fit">
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
                     <Accordions
@@ -100,22 +126,7 @@ export default function CardWithForm() {
                         <Input
                           id="name"
                           onChange={(e) => {
-                            if (e.target.value == "0" || e.target.value == "") {
-                              enterMore();
-                              setflag(false);
-                              setCollatrol("");
-                              setLoan("");
-                              return;
-                            }
-
-                            console.log(e.target.value);
-                            setCollatrol(e.target.value);
-                            const num: any = e.target.value;
-                            const intrestx = parseFloat(e.target.value) * 0.036; // 3.4%   90%  => 0.034 X 0.9 => 0.036
-                            setLoan((num * 0.9).toString());
-                            setintrest(intrestx.toString());
-                            setFlowRate((intrestx / 12).toString());
-                            setflag(true);
+                            HandleCollatoral(e);
                           }}
                           placeholder="enter collatoral amount"
                           value={collatoral}
@@ -130,23 +141,7 @@ export default function CardWithForm() {
                         <Input
                           id="name"
                           onChange={(e) => {
-                            if (e.target.value == "0" || e.target.value == "") {
-                              enterMore();
-                              setflag(false);
-                              setLoan("");
-                              setCollatrol("");
-                              return;
-                            }
-
-                            console.log(e.target.value);
-                            const num = parseFloat(e.target.value);
-                            setCollatrol((num * 1.11111).toString());
-
-                            const intrestx = parseFloat(e.target.value) * 0.034; // 3.4%   90%  => 0.034 X 0.9 => 0.036
-                            setLoan(e.target.value);
-                            setintrest(intrestx.toString());
-                            setFlowRate((intrestx / 12).toString());
-                            setflag(true);
+                            HandleLoan(e);
                           }}
                           placeholder="enter Loan amount"
                           value={loan}
@@ -155,13 +150,7 @@ export default function CardWithForm() {
                     </div>
 
                     {flag ? (
-                      <div className="w-full">
-                        {!flagDeposit ? (
-                          <Approve amount={collatoral} />
-                        ) : (
-                          <Deposit collatoral={collatoral} loan={loan} />
-                        )}
-                      </div>
+                      <BorrowButton collatoral={collatoral} />
                     ) : (
                       <div className="text-red-500 m-3 flex justify-center">
                         ⚠️Please enter the collatoral amount
@@ -180,14 +169,6 @@ export default function CardWithForm() {
                         <Label>0 / eth</Label>
                       )}
                     </div>
-                    {flag && (
-                      <div className="p-3 flex justify-center gap-3 w-full">
-                        <Button variant="secondary">
-                          Claim your {loan}/eth 💵
-                        </Button>
-                        <Superfluid amount={flowrate} />
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex justify-end"></div>

@@ -1,17 +1,53 @@
 "use client";
-import React from "react";
-import { useContractWrite, erc20ABI } from "wagmi";
+import React, { useState } from "react";
+import { useContractWrite, useContractRead, useAccount, erc20ABI } from "wagmi";
 import { Button } from "@/components/ui/button";
-import { ethers } from "ethers";
 import { useMyContext } from "@/app/AppContext";
-import { etherUnits } from "viem";
+import { toast } from "./ui/use-toast";
+
 function Approve({ amount }: { amount: string }) {
-  const { setFlagDeposit } = useMyContext();
+  const { address } = useAccount();
+  const [verifyFlag, setVerifyFlag] = useState(false);
+  const { setFlagApprove, setFlagDeposit } = useMyContext();
   const { data, isLoading, isSuccess, write } = useContractWrite({
     address: "0xEF9aFd8b3701198cCac6bf55458C38F61C4b55c4",
     abi: erc20ABI,
     functionName: "approve",
   });
+  const PwethAllowances = useContractRead({
+    address: "0xEF9aFd8b3701198cCac6bf55458C38F61C4b55c4",
+    abi: erc20ABI,
+    functionName: "allowance",
+    args: [
+      `0x${address?.slice(2)}`,
+      "0x4EC74b34dd8190f02E7d13e00393716981b2BADE",
+    ],
+  });
+
+  function Verifying() {
+    setVerifyFlag(true);
+    console.log(PwethAllowances.data);
+    const Checkvalue = PwethAllowances?.data ?? BigInt(0);
+    console.log(Checkvalue);
+    if (Checkvalue > BigInt(parseFloat(amount) * 1000001000000000000)) {
+      setFlagApprove(false);
+      setFlagDeposit(true);
+      toast({
+        title: `You already have more Allowance  than Approval amount`,
+        variant: "success",
+      });
+
+      return;
+    }
+
+    setVerifyFlag(false);
+    write({
+      args: [
+        `0x${"4EC74b34dd8190f02E7d13e00393716981b2BADE"}`,
+        BigInt(parseFloat(amount) * 1000001000000000000),
+      ],
+    });
+  }
 
   if (isLoading) {
     return (
@@ -21,25 +57,17 @@ function Approve({ amount }: { amount: string }) {
       </div>
     );
   }
+
   if (isSuccess) {
+    setFlagApprove(false);
     setFlagDeposit(true);
     return;
   }
+
   return (
     <div>
-      <Button
-        className="m-3 w-full"
-        variant="destructive"
-        onClick={() => {
-          write({
-            args: [
-              `0x${"7C5dfc974D51069de0646F2A9cd50434eDa9433c"}`,
-              BigInt(parseInt(amount) * 1000001000000000000),
-            ],
-          });
-        }}
-      >
-        Approve {amount}/pweth
+      <Button className="m-3 w-full" variant="destructive" onClick={Verifying}>
+        {!verifyFlag ? `  Approve ${amount}/pweth ` : "Verifying Alloance"}
       </Button>
     </div>
   );
