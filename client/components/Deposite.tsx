@@ -33,7 +33,11 @@ export function Deposit({ collatoral }: { collatoral: string }) {
 
   if (isSuccess) {
     console.log(data);
-    return <div>Completed</div>;
+    return (
+      <div className="flex justify-center m-3 border-solid border-2 p-3 bg-green-400 border-white rounded-2xl">
+        Deposite of {collatoral}/eth Completed
+      </div>
+    );
   }
   function handleClick() {
     write({
@@ -42,7 +46,11 @@ export function Deposit({ collatoral }: { collatoral: string }) {
   }
   console.log(parseFloat(collatoral) * 1000000000000000000);
   return (
-    <Button className="m-3 w-full" variant="outline" onClick={handleClick}>
+    <Button
+      className="m-3 w-full"
+      variant="outline"
+      onClick={() => handleClick()}
+    >
       Deposit {collatoral}/PWeth ➡️ get {parseFloat(collatoral) * 0.9}/eth
     </Button>
   );

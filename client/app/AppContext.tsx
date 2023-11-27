@@ -11,6 +11,8 @@ import React, {
 interface MyContextProps {
   flagDeposit: boolean;
   setFlagDeposit: Dispatch<SetStateAction<boolean>>;
+  txhashFlag: boolean;
+  settxhashFlag: Dispatch<SetStateAction<boolean>>;
   txhash: string;
   setTxhash: Dispatch<SetStateAction<string>>;
   flagApprove: boolean;
@@ -27,6 +29,7 @@ export function MyContextProvider({ children }: MyContextProviderProps) {
   const [flagDeposit, setFlagDeposit] = useState<boolean>(false);
   const [txhash, setTxhash] = useState<string>("");
   const [flagApprove, setFlagApprove] = useState<boolean>(true);
+  const [txhashFlag, settxhashFlag] = useState<boolean>(true);
 
   const contextValue: MyContextProps = {
     flagDeposit,
@@ -34,7 +37,8 @@ export function MyContextProvider({ children }: MyContextProviderProps) {
     txhash,
     setTxhash,
     setFlagApprove,
-
+    txhashFlag,
+    settxhashFlag,
     setFlagDeposit,
   };
 

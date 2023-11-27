@@ -1,15 +1,8 @@
 "use client";
 import * as React from "react";
-
+import TransactionData from "./TransactionData";
+import { useAccount, useBalance } from "wagmi";
 import { useMyContext } from "../AppContext";
-import {
-  useAccount,
-  useBalance,
-  useContractWrite,
-  useContractRead,
-  usePrepareContractWrite,
-  erc20ABI,
-} from "wagmi";
 import BorrowButton from "@/components/MainBorrowButton";
 import {
   Card,
@@ -24,6 +17,7 @@ import { Accordions } from "@/components/Accordation";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function CardWithForm() {
+  const { txhashFlag } = useMyContext();
   const { address } = useAccount();
   const { toast } = useToast();
   const [flag, setflag] = React.useState(false);
@@ -93,6 +87,7 @@ export default function CardWithForm() {
 
   return (
     <div className="flex justify-center pt-[5%] h-[100%]  space-y-2">
+      {/* <div className="w-fit flex flex-row min-h-[400px]  h-fit border-solid border-2 border-purple-500 max-h-[70%]"> */}
       <Card className="w-fit max-w-[70%] min-h-[400px]  h-fit mb-[6%] border-solid border-2 border-purple-500 max-h-[70%]">
         <CardHeader>
           <CardTitle>Borrow Against PWETH</CardTitle>
@@ -180,6 +175,10 @@ export default function CardWithForm() {
           </div>
         </CardContent>
       </Card>
+      {/* <div>
+          <TransactionData txhash="0xb9f49daca1a610298ef8f64a99e4ecedef2144bc4dc990e1dd90881fc190c535" />
+        </div> */}
+      {/* </div> */}
     </div>
   );
 }
