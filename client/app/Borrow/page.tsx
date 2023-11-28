@@ -1,9 +1,11 @@
 "use client";
 import * as React from "react";
-import TransactionData from "./TransactionData";
+import TransactionData from "./DepositData";
 import { useAccount, useBalance } from "wagmi";
 import { useMyContext } from "../AppContext";
-import BorrowButton from "@/components/MainBorrowButton";
+import Approve from "@/components/Approve";
+import { Deposit } from "@/components/Deposite";
+
 import {
   Card,
   CardContent,
@@ -17,12 +19,11 @@ import { Accordions } from "@/components/Accordation";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function CardWithForm() {
-  const { txhashFlag } = useMyContext();
   const { address } = useAccount();
   const { toast } = useToast();
   const [flag, setflag] = React.useState(false);
-  const [collatoral, setCollatrol] = React.useState("");
-  const [loan, setLoan] = React.useState("");
+  const [collatoral, setCollatrol] = React.useState<number>(0);
+
   const [intrest, setintrest] = React.useState("");
 
   const { data, isError, isLoading } = useBalance({
@@ -56,12 +57,13 @@ export default function CardWithForm() {
     if (e.target.value == "0" || e.target.value == "") {
       enterMore();
       setflag(false);
-      setLoan("");
-      setCollatrol("");
+
+      setCollatrol(0);
       return;
     }
-    setCollatrol((parseFloat(e.target.value) * 1.11111).toString());
-    setLoan(e.target.value);
+    const col = (parseFloat(e.target.value) * 1.11111).toString();
+    setCollatrol(parseFloat(e.target.value) * 1.11111);
+
     setintrest(
       (parseFloat(e.target.value) * 0.034).toString() // 3.4%   90%  => 0.034 X 0.9 => 0.036
     );
@@ -71,13 +73,14 @@ export default function CardWithForm() {
     if (e.target.value == "0" || e.target.value == "") {
       enterMore();
       setflag(false);
-      setCollatrol("");
-      setLoan("");
+      setCollatrol(0);
+
+      // setLoan("");
       return;
     }
 
-    setCollatrol(e.target.value);
-    setLoan((parseFloat(e.target.value) * 0.9).toString());
+    setCollatrol(parseFloat(e.target.value));
+    // setLoan((parseFloat(e.target.value) * 0.9).toString());
     setintrest(
       (parseFloat(e.target.value) * 0.036).toString() // 3.4%   90%  => 0.034 X 0.9 => 0.036
     );
@@ -120,6 +123,7 @@ export default function CardWithForm() {
                         </div>
                         <Input
                           id="name"
+                          type="number"
                           onChange={(e) => {
                             HandleCollatoral(e);
                           }}
@@ -135,17 +139,21 @@ export default function CardWithForm() {
                         </div>
                         <Input
                           id="name"
+                          type="number"
                           onChange={(e) => {
                             HandleLoan(e);
                           }}
                           placeholder="enter Loan amount"
-                          value={loan}
+                          value={collatoral * 0.9}
                         />
                       </div>
                     </div>
 
                     {flag ? (
-                      <BorrowButton collatoral={collatoral} />
+                      <div>
+                        <Approve amount={collatoral} />
+                        <Deposit collatoral={collatoral} />
+                      </div>
                     ) : (
                       <div className="text-red-500 m-3 flex justify-center">
                         ⚠️Please enter the collatoral amount

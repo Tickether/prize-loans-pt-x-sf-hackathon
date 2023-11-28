@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useMyContext } from "@/app/AppContext";
 import { toast } from "./ui/use-toast";
 
-function Approve({ amount }: { amount: string }) {
+const Approve = React.memo(({ amount }: { amount: number }) => {
   const { address } = useAccount();
   const [verifyFlag, setVerifyFlag] = useState(false);
   const { setFlagApprove, setFlagDeposit } = useMyContext();
@@ -29,7 +29,7 @@ function Approve({ amount }: { amount: string }) {
     console.log(PwethAllowances.data);
     const Checkvalue = PwethAllowances?.data ?? BigInt(0);
     console.log(Checkvalue);
-    if (Checkvalue > BigInt(parseFloat(amount) * 1000001000000000000)) {
+    if (Checkvalue > BigInt(amount * 1000001000000000000)) {
       setFlagApprove(false);
       setFlagDeposit(true);
       toast({
@@ -38,15 +38,15 @@ function Approve({ amount }: { amount: string }) {
       });
 
       return;
+    } else {
+      setVerifyFlag(false);
+      write({
+        args: [
+          `0x${"4EC74b34dd8190f02E7d13e00393716981b2BADE"}`,
+          BigInt(amount * 1000001000000000000),
+        ],
+      });
     }
-
-    setVerifyFlag(false);
-    write({
-      args: [
-        `0x${"4EC74b34dd8190f02E7d13e00393716981b2BADE"}`,
-        BigInt(parseFloat(amount) * 1000001000000000000),
-      ],
-    });
   }
 
   if (isLoading) {
@@ -59,18 +59,30 @@ function Approve({ amount }: { amount: string }) {
   }
 
   if (isSuccess) {
-    setFlagApprove(false);
-    setFlagDeposit(true);
-    return;
+    return (
+      <div className="flex justify-center m-3 border-solid border-2 p-3 border-green-400 rounded-2xl">
+        Approved
+      </div>
+    );
   }
 
   return (
     <div>
-      <Button className="m-3 w-full" variant="destructive" onClick={Verifying}>
-        {!verifyFlag ? `  Approve ${amount}/pweth ` : "Verifying Alloance"}
-      </Button>
+      {!verifyFlag ? (
+        <Button
+          className="m-3 w-full"
+          variant="destructive"
+          onClick={() => Verifying()}
+        >
+          ` Approve ${amount}/pweth `
+        </Button>
+      ) : (
+        <div className="flex justify-center m-3 border-solid border-2 p-3 border-green-400 rounded-2xl">
+          Approved
+        </div>
+      )}
     </div>
   );
-}
+});
 
 export default Approve;
