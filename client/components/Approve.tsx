@@ -30,8 +30,6 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
     const Checkvalue = PwethAllowances?.data ?? BigInt(0);
     console.log(Checkvalue);
     if (Checkvalue > BigInt(amount * 1000001000000000000)) {
-      setFlagApprove(false);
-      setFlagDeposit(true);
       toast({
         title: `You already have more Allowance  than Approval amount`,
         variant: "success",

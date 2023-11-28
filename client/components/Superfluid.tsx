@@ -99,7 +99,7 @@ export default function Superfluid({
               >
                 {({ openModal }) => (
                   <Button
-                    className="m-3 w-full"
+                    className="p-3 w-[70%]"
                     variant="secondary"
                     onClick={(e) => {
                       openModal();

@@ -8,12 +8,14 @@ import { useToast } from "./ui/use-toast";
 import { parseEther } from "viem";
 export function Deposit({ collatoral }: { collatoral: number }) {
   const { toast } = useToast();
+  const { setFlagDeposit, flagDeposit } = useMyContext();
   const { data, isLoading, isSuccess, write, isError, error } =
     useContractWrite({
       address: "0x4EC74b34dd8190f02E7d13e00393716981b2BADE",
       abi: pweethyABI,
       functionName: "collateralizedPrizeLoan",
     });
+
   const handleClick = React.useCallback(() => {
     try {
       console.log(BigInt(collatoral * 1000000000000000000));
@@ -33,24 +35,12 @@ export function Deposit({ collatoral }: { collatoral: number }) {
     );
   }
 
-  // if (isError) {
-  //   console.error(error); // Log the error for debugging purposes
-  //   console.log(data);
-  //   // toast({
-  //   //   title: "There is some error. Please refresh the page and try again.",
-  //   //   variant: "destructive",
-  //   // });
-
-  //   // Handle the error gracefully, you might want to render an error message or take other actions
-  //   return (
-  //     <div className="flex justify-center m-3 border-solid border-2 p-3 bg-red-500 border-white rounded-2xl">
-  //       Error occurred while processing the deposit.
-  //     </div>
-  //   );
-  // }
-
   if (isSuccess) {
+    setFlagDeposit(true);
     console.log(data);
+    setTimeout(() => {
+      setFlagDeposit(true);
+    }, 2000);
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 bg-green-400 border-white rounded-2xl">
         Deposit of {collatoral}/eth Completed
