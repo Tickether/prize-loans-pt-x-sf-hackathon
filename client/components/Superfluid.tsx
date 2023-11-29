@@ -105,7 +105,7 @@ export default function Superfluid({
                       openModal();
                     }}
                   >
-                    Start your Intrest payment💵
+                    Start your interest payment💵
                   </Button>
                 )}
               </SuperfluidWidget>
