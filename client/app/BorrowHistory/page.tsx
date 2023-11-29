@@ -17,8 +17,6 @@ import { useEthersProvider } from "@/utils/WagmiEthersProvider";
 import { useEthersSigner } from "@/utils/WagmiEthersSigner";
 import { useEffect } from "react";
 
-export const runtime = 'edge';
-
 function Repay() {
   const { address } = useAccount();
 
