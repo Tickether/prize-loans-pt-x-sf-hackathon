@@ -197,4 +197,5 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   );
 };
 
+export const runtime = 'edge';
 export default Page;

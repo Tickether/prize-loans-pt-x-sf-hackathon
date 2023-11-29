@@ -40,5 +40,5 @@ const PayLoanAmount = ({
   );
 };
 
-export default PayLoanAmount;
 export const runtime = 'edge';
+export default PayLoanAmount;
