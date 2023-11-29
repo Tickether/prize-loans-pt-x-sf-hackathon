@@ -138,34 +138,34 @@ const page = ({ params }: { params: { loanid: bigint } }) => {
             </TableRow>
           </Table>
           <div className="mt-4 border-solid border-2 flex justify-around flex-col gap-4 w-[50%] p-3 rounded-lg border-blue-400">
-            <div className="flex gap-2 ">
-              <div className="w-[50%]">
-                {" "}
-                <Input
-                  placeholder="Please amount you want to pay"
-                  type="number"
-                  className="w-full"
-                  max={Number(ethers.utils.formatEther(data[2].toString()))}
-                  onChange={(e) => {
-                    if (isNaN(parseFloat(e.target.value))) {
-                      return;
-                    }
-                    setPayamount(
-                      BigInt(parseFloat(e.target.value) * 1000000000000000000)
-                    );
-                  }}
-                />
+            {data[3] < data[2] ? (
+              <div className="flex gap-2 ">
+                <div className="w-[50%]">
+                  {" "}
+                  <Input
+                    placeholder="Please amount you want to pay"
+                    type="number"
+                    className="w-full"
+                    max={Number(ethers.utils.formatEther(data[2].toString()))}
+                    onChange={(e) => {
+                      if (isNaN(parseFloat(e.target.value))) {
+                        return;
+                      }
+                      setPayamount(
+                        BigInt(parseFloat(e.target.value) * 1000000000000000000)
+                      );
+                    }}
+                  />
+                </div>
+                <div className="w-[50%]">
+                  {!flagLoanpay ? (
+                    <Approve amount={payamount} />
+                  ) : (
+                    <PayLoanAmount amount={payamount} loanid={params.loanid} />
+                  )}
+                </div>
               </div>
-              <div className="w-[50%]">
-                {!flagLoanpay ? (
-                  <Approve amount={payamount} />
-                ) : (
-                  <PayLoanAmount amount={payamount} loanid={params.loanid} />
-                )}
-              </div>
-            </div>
-
-            {data[3] >= data[1] && (
+            ) : (
               <Button
                 variant="flat"
                 onClick={() => {

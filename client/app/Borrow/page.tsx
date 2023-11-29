@@ -32,27 +32,27 @@ export default function CardWithForm() {
     token: `0x${"EF9aFd8b3701198cCac6bf55458C38F61C4b55c4"}`,
   });
 
-  const enterMore = React.useCallback(() => {
+  const enterMore = () => {
     toast({
       variant: "destructive",
       title: "Not Enough",
       description: "Please Enter more than Zero",
     });
-  }, []);
+  };
 
-  const Zerobalance = React.useCallback(() => {
+  const Zerobalance = () => {
     toast({
       variant: "destructive",
       title: "Not Enough Balance",
       description: "Please first get some token by staking in PoolTogether",
     });
-  }, [data]);
+  };
 
   React.useEffect(() => {
     if (data?.formatted == "0") {
       Zerobalance();
     }
-  }, [data, Zerobalance]);
+  }, [data]);
 
   function HandleLoan(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value == "0" || e.target.value == "") {
