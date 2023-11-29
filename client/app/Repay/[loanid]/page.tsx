@@ -145,7 +145,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                   DeleteExistingFlow(data[4]);
                 }}
               >
-                Stop your Interest Stream. All Loan is paid❤️
+                Stop your Interest Stream. Loan is paid back in full ❤️
               </Button>
             ) : (
               <div className="flex gap-2 ">
