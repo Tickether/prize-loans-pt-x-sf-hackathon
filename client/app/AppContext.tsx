@@ -11,6 +11,8 @@ import React, {
 interface MyContextProps {
   flagDeposit: boolean;
   setFlagDeposit: Dispatch<SetStateAction<boolean>>;
+  flagLoanpay: boolean;
+  setFlagLoanpay: Dispatch<SetStateAction<boolean>>;
   txhashFlag: boolean;
   settxhashFlag: Dispatch<SetStateAction<boolean>>;
   txhash: string;
@@ -27,6 +29,7 @@ interface MyContextProviderProps {
 
 export function MyContextProvider({ children }: MyContextProviderProps) {
   const [flagDeposit, setFlagDeposit] = useState<boolean>(false);
+  const [flagLoanpay, setFlagLoanpay] = useState<boolean>(false);
   const [txhash, setTxhash] = useState<string>("");
   const [flagApprove, setFlagApprove] = useState<boolean>(true);
   const [txhashFlag, settxhashFlag] = useState<boolean>(true);
@@ -36,6 +39,8 @@ export function MyContextProvider({ children }: MyContextProviderProps) {
     flagApprove,
     txhash,
     setTxhash,
+    flagLoanpay,
+    setFlagLoanpay,
     setFlagApprove,
     txhashFlag,
     settxhashFlag,

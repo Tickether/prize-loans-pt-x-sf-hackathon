@@ -3,7 +3,7 @@ import * as React from "react";
 import TransactionData from "./DepositData";
 import { useAccount, useBalance } from "wagmi";
 import { useMyContext } from "../AppContext";
-import Approve from "@/components/Approve";
+import Approve from "@/components/ApprovePweth";
 import { Deposit } from "@/components/Deposite";
 import DepositData from "./DepositData";
 import {
@@ -184,7 +184,7 @@ export default function CardWithForm() {
             </div>
           </CardContent>
         </Card>
-        {!flagDeposit && collatoral != 0 && !Number.isNaN(collatoral) && (
+        {flagDeposit && collatoral != 0 && !Number.isNaN(collatoral) && (
           <div className="min-w-[400px] border-2 flex justify-center max-w-[50%] items-center border-solid border-white">
             <TransactionData
               address={`0x${address?.slice(2)}`}

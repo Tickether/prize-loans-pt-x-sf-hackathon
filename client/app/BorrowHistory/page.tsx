@@ -1,10 +1,10 @@
 "use client";
-
+import PayLoanAmount from "../Repay/[loanid]/PayLoanAmount";
 import { pweethyABI } from "@/utils/pweethy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ethers } from "ethers";
-
+import Link from "next/link";
 import { useContractRead, useAccount } from "wagmi";
 import {
   Accordion,
@@ -29,7 +29,7 @@ function Repay() {
 
   useEffect(() => {
     console.log("fws");
-  }, [address]);
+  }, [address, isError]);
 
   if (isLoading) {
     return (
@@ -68,46 +68,6 @@ const TokenData = ({ num }: { num: bigint }) => {
     functionName: "borrowers",
     args: [num],
   });
-  useEffect(() => {
-    console.log("fws");
-  }, [data]);
-  async function DeleteExistingFlow(recipient: string) {
-    console.log(recipient);
-    console.log(provider);
-    console.log(signer);
-    try {
-      if (signer != undefined) {
-        const chainId = "420";
-        const sf = await Framework.create({
-          chainId: Number(chainId),
-          provider: provider,
-        });
-
-        const superSigner = sf.createSigner({ signer: signer });
-
-        console.log(signer);
-        console.log(await superSigner.getAddress());
-        const daix = await sf.loadSuperToken(
-          "0xE01F8743677Da897F4e7De9073b57Bf034FC2433"
-        );
-
-        // console.log(daix);
-        const ss = await signer.getAddress();
-        const deleteFlowOperation = daix.deleteFlow({
-          sender: await signer.getAddress(),
-          receiver: recipient,
-          // userData?: string
-        });
-
-        const result = await deleteFlowOperation.exec(superSigner);
-        console.log(result);
-
-        return result;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
   if (isLoading) {
     return <div>Your Data is loading Please Wait .....</div>;
   }
@@ -132,87 +92,54 @@ const TokenData = ({ num }: { num: bigint }) => {
         } h-fit max-w-[80%]   rounded-md border p-4`}
       >
         <div>
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                <div className="flex w-full flex-col gap-7">
-                  <div className="w-full flex h-fit ">
-                    <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                      LoanPayableAddress
-                      {`${data[4].slice(0, 4)}....${data[4].slice(
-                        data[0].length - 4,
-                        data[0].length
-                      )}`}
-                    </div>
+          <div className="flex w-full flex-col gap-7">
+            <div className="w-full flex h-fit ">
+              <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
+                LoanPayableAddress
+                {`${data[4].slice(0, 4)}....${data[4].slice(
+                  data[0].length - 4,
+                  data[0].length
+                )}`}
+              </div>
 
-                    <div className="flex justify-end ml-[30px] text-xl font-bold ">
-                      Borrower :
-                      {`${data[0].slice(0, 4)}....${data[0].slice(
-                        data[0].length - 4,
-                        data[0].length
-                      )}`}
-                    </div>
-                  </div>
-                  <div className="w-full flex h-fit ">
-                    <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                      Collatoral amount <br />
-                      {`${ethers.utils.formatEther(data[1].toString())}/pweth`}
-                    </div>
-                    <div className="flex justify-end ml-[30px] text-xl font-bold ">
-                      Loan Amount <br />
-                      {`${ethers.utils.formatEther(data[2].toString())}/weth`}
-                    </div>
-                  </div>
-                  <div className="w-full flex h-fit ">
-                    <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                      Lending time : {`${disbursTime.toString().slice(4, 25)}`}
-                    </div>
-                    <div className="flex justify-end ml-[30px] text-xl font-bold ">
-                      Loan Expiry Date {`${ExpireTime.toString().slice(4, 25)}`}
-                    </div>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                {currentTimestampInSeconds < data[6] ? (
-                  <div className="flex justify-center gap-10 border-t-2 border-red-400 pt-10 ml-[30px] text-xl font-bold ">
-                    <Button
-                      variant="success"
-                      onClick={() => {
-                        alert("hello sir");
-                      }}
-                    >
-                      Pay all at once
-                    </Button>
-                    <div className="flex flex-row gap-3 text-white h-fit">
-                      <Input placeholder="enter partial amount" />
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          alert("hello sir");
-                        }}
-                      >
-                        Pay partial
-                      </Button>
-                    </div>
-                    <Button
-                      variant="destructive"
-                      onClick={async () => {
-                        await DeleteExistingFlow(data[4]);
-                      }}
-                    >
-                      Delete Intrest Stream
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="text-4xl flex items-center font-bold border-t-2 flex-col  border-black pt-10 text-black">
-                    <p>thanks for Taking loan from us 😊</p>
-                    <p>this loan is closed</p>
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+              <div className="flex justify-end ml-[30px] text-xl font-bold ">
+                Borrower :
+                {`${data[0].slice(0, 4)}....${data[0].slice(
+                  data[0].length - 4,
+                  data[0].length
+                )}`}
+              </div>
+            </div>
+            <div className="w-full flex h-fit ">
+              <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
+                Collatoral amount <br />
+                {`${ethers.utils.formatEther(data[1].toString())}/pweth`}
+              </div>
+              <div className="flex justify-end ml-[30px] text-xl font-bold ">
+                Loan Amount <br />
+                {`${ethers.utils.formatEther(data[2].toString())}/weth`}
+              </div>
+            </div>
+            <div className="w-full flex h-fit ">
+              <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
+                Lending time : {`${disbursTime.toString().slice(4, 25)}`}
+              </div>
+              <div className="flex justify-end ml-[30px] text-xl font-bold ">
+                Loan Expiry Date {`${ExpireTime.toString().slice(4, 25)}`}
+              </div>
+            </div>
+          </div>
+
+          {currentTimestampInSeconds < data[6] ? (
+            <div className="flex justify-end gap-10  pt-10 ml-[30px] text-xl font-bold ">
+              <Link href={`/Repay/${num}`}>Click here to Pay your loan</Link>
+            </div>
+          ) : (
+            <div className="text-4xl flex items-center font-bold border-t-2 flex-col  border-black pt-10 text-black">
+              <p>thanks for Taking loan from us 😊</p>
+              <p>this loan is closed</p>
+            </div>
+          )}
         </div>
       </div>
     );
