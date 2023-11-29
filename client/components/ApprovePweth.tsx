@@ -86,3 +86,5 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
 });
 
 export default Approve;
+
+Approve.displayName = "ApprovePweth";

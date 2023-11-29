@@ -40,19 +40,15 @@ export default function CardWithForm() {
     });
   };
 
-  const Zerobalance = () => {
-    toast({
-      variant: "destructive",
-      title: "Not Enough Balance",
-      description: "Please first get some token by staking in PoolTogether",
-    });
-  };
-
   React.useEffect(() => {
     if (data?.formatted == "0") {
-      Zerobalance();
+      toast({
+        variant: "destructive",
+        title: "Not Enough Balance",
+        description: "Please first get some token by staking in PoolTogether",
+      });
     }
-  }, [data]);
+  }, [data, toast]);
 
   function HandleLoan(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value == "0" || e.target.value == "") {

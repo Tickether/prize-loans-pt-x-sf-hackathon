@@ -127,3 +127,5 @@ const TokenData = React.memo(
     }
   }
 );
+
+TokenData.displayName = "TokenData";

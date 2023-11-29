@@ -25,7 +25,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
     } catch (e) {
       console.log(e);
     }
-  }, [collatoral]);
+  }, [collatoral, write]);
 
   if (isLoading) {
     return (
