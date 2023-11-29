@@ -23,15 +23,18 @@ const DepositData = ({
   amount: string;
 }) => {
   const { flagDeposit } = useMyContext();
-
+  const [dataDo, setDataDo] = React.useState<readonly bigint[]>();
   const { data, isError, isLoading, isSuccess } = useContractRead({
     address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
     abi: pweethyABI,
     functionName: "getBorrowerLoans",
     args: [`0x${address.slice(2)}`],
   });
+
   useEffect(() => {
-    console.log("recalculate");
+    if (data) {
+      setDataDo(data);
+    }
   }, [flagDeposit]);
   if (isLoading) {
     return <div> Processing transaction Hash......</div>;
@@ -127,3 +130,5 @@ const TokenData = React.memo(
     }
   }
 );
+
+TokenData.displayName = "TokenData";

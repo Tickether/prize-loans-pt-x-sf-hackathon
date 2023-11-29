@@ -71,3 +71,5 @@ const Approve = React.memo(({ amount }: { amount: bigint }) => {
 });
 
 export default Approve;
+
+Approve.displayName = "ApproveWeth";

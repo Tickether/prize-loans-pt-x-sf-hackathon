@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordions } from "@/components/Accordation";
@@ -38,7 +39,7 @@ export default function CardWithForm() {
       title: "Not Enough",
       description: "Please Enter more than Zero",
     });
-  }, []);
+  }, [toast]);
 
   const Zerobalance = React.useCallback(() => {
     toast({
@@ -46,7 +47,7 @@ export default function CardWithForm() {
       title: "Not Enough Balance",
       description: "Please first get some token by staking in PoolTogether",
     });
-  }, [data]);
+  }, [toast]);
 
   React.useEffect(() => {
     if (data?.formatted == "0") {
@@ -132,12 +133,13 @@ export default function CardWithForm() {
                             value={collatoral}
                           />
                         </div>
-                        {}
+
                         <div className="border-b-4 border-sky-500"></div>
                         <div className="flex flex-row justify-between  m-3 p-3 ">
                           <div className="flex items-center justify-center">
                             <Label htmlFor="name">Loan Amount</Label>
                           </div>
+
                           <Input
                             id="name"
                             type="number"
