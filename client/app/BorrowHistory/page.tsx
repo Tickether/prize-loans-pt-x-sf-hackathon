@@ -95,7 +95,7 @@ const TokenData = ({ num }: { num: bigint }) => {
           <div className="flex w-full flex-col gap-7">
             <div className="w-full flex h-fit ">
               <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                LoanPayableAddress
+                Loan Payable Address :
                 {`${data[4].slice(0, 4)}....${data[4].slice(
                   data[0].length - 4,
                   data[0].length
@@ -112,12 +112,12 @@ const TokenData = ({ num }: { num: bigint }) => {
             </div>
             <div className="w-full flex h-fit ">
               <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                Collateral amount <br />
-                {`${ethers.utils.formatEther(data[1].toString())}/pWETH`}
+                Collateral Amount <br />
+                {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </div>
               <div className="flex justify-end ml-[30px] text-xl font-bold ">
                 Loan Amount <br />
-                {`${ethers.utils.formatEther(data[2].toString())}/WETH`}
+                {`${ethers.utils.formatEther(data[2].toString())} WETH`}
               </div>
             </div>
             <div className="w-full flex h-fit ">
@@ -136,13 +136,13 @@ const TokenData = ({ num }: { num: bigint }) => {
                 className="border-solid border-2 border-white p-3 rounded-3xl"
                 href={`/Repay/${num}`}
               >
-                Click here to Pay your Loan
+                Click here to pay back your Loan
               </Link>
             </div>
           ) : (
             <div className="text-4xl flex items-center font-bold border-t-2 flex-col  border-black pt-10 text-black">
-              <p>thanks for Taking loan from us 😊</p>
-              <p>this loan is closed</p>
+              <p>Thanks for taking a loan from us 😊</p>
+              <p>This loan is closed</p>
             </div>
           )}
         </div>

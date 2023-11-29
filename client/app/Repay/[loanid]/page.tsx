@@ -85,7 +85,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
       <div className="h-[100vh] flex justify-center mt-[7%]">
         <div className=" min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
-            Loan Detail
+            Loan Details
           </div>
           <Table>
             <TableRow>
@@ -98,7 +98,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>ColateralAmount</TableCell>
+              <TableCell colSpan={3}>Collateral Amount</TableCell>
               <TableCell className="text-right">
                 {`${ethers.utils.formatEther(data[1].toString())}/pWETH`}
               </TableCell>
@@ -110,13 +110,13 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>LoanAmount Paid</TableCell>
+              <TableCell colSpan={3}>Loan Amount Paid</TableCell>
               <TableCell className="text-right">
                 {`${ethers.utils.formatEther(data[3].toString())}/WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>LoanPayableAddress</TableCell>
+              <TableCell colSpan={3}>Loan Payable Address</TableCell>
               <TableCell className="text-right">
                 {`${data[4].slice(0, 4)}....${data[4].slice(
                   data[0].length - 4,
@@ -125,7 +125,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan disburs Time </TableCell>
+              <TableCell colSpan={3}>Loan disburse Time </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>
@@ -145,7 +145,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                   DeleteExistingFlow(data[4]);
                 }}
               >
-                Delete Your Interest stream All Loan is paid❤️
+                Stop your Interest Stream. Loan is paid back in full ❤️
               </Button>
             ) : (
               <div className="flex gap-2 ">

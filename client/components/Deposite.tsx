@@ -41,7 +41,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
     }, 5000);
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 bg-green-400 border-white rounded-2xl">
-        Deposit of {collatoral}/eth Completed
+        Deposit of {collatoral} pWETH complete
       </div>
     );
   }
