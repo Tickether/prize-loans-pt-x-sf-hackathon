@@ -22,7 +22,7 @@ const PayLoanAmount = ({
   if (isSuccess) {
     return (
       <div>
-        Payment completed. Please refresh and check your transaction history
+        Payment complete. Please refresh and check your transaction history
         hash {data?.hash}
       </div>
     );
@@ -35,7 +35,7 @@ const PayLoanAmount = ({
         write({ args: [amount, loanid] });
       }}
     >
-      Pay Loan
+      Pay Back Loan
     </Button>
   );
 };

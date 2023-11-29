@@ -75,7 +75,7 @@ const TokenData = React.memo(
       return (
         <div>
           <div className="flex justify-center text-3xl font-bold">
-            Loan Detail
+            Loan Details
           </div>
           <Table>
             <TableRow>
