@@ -41,10 +41,10 @@ function Repay() {
   if (isSuccess && data) {
     console.log(data);
     const num: bigint = data[data?.length - 1];
-
+    const Array: bigint[] = data.toReversed();
     return (
       <div className="pt-44 flex   items-center flex-col gap-10 ">
-        {data?.map((item, index) => {
+        {Array?.map((item, index) => {
           return (
             <div className=" flex justify-center w-full " key={index}>
               <TokenData num={item} />
