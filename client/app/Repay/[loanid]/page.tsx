@@ -13,13 +13,13 @@ import { useContractRead } from "wagmi";
 import Approve from "@/components/ApproveWeth";
 import { useMyContext } from "@/app/AppContext";
 import PayLoanAmount from "./PayLoanAmount";
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
 import { pweethyABI } from "@/utils/pweethy";
 import { ethers } from "ethers";
 import { Input } from "@/components/ui/input";
-const page = ({ params }: { params: { loanid: bigint } }) => {
+const Page = ({ params }: { params: { loanid: bigint } }) => {
   const { flagLoanpay } = useMyContext();
-  const [payamount, setPayamount] = React.useState<bigint>(BigInt(0));
+  const [payamount, setPayamount] = React.useState<number>(0);
   const provider = useEthersProvider();
   const signer = useEthersSigner();
   console.log(params);
@@ -138,42 +138,51 @@ const page = ({ params }: { params: { loanid: bigint } }) => {
             </TableRow>
           </Table>
           <div className="mt-4 border-solid border-2 flex justify-around flex-col gap-4 w-[50%] p-3 rounded-lg border-blue-400">
-            <div className="flex gap-2 ">
-              <div className="w-[50%]">
-                {" "}
-                <Input
-                  placeholder="Please amount you want to pay"
-                  type="number"
-                  className="w-full"
-                  max={Number(ethers.utils.formatEther(data[2].toString()))}
-                  onChange={(e) => {
-                    if (isNaN(parseFloat(e.target.value))) {
-                      return;
-                    }
-                    setPayamount(
-                      BigInt(parseFloat(e.target.value) * 1000000000000000000)
-                    );
-                  }}
-                />
-              </div>
-              <div className="w-[50%]">
-                {!flagLoanpay ? (
-                  <Approve amount={payamount} />
-                ) : (
-                  <PayLoanAmount amount={payamount} loanid={params.loanid} />
-                )}
-              </div>
-            </div>
-
-            {data[3] >= data[1] && (
+            {data[3] >= data[2] ? (
               <Button
-                variant="flat"
+                variant="success"
                 onClick={() => {
                   DeleteExistingFlow(data[4]);
                 }}
               >
-                Delete Your Intrest stream
+                Delete Your Intrest stream All Loan is paid❤️
               </Button>
+            ) : (
+              <div className="flex gap-2 ">
+                <div>
+                  <Button
+                    onClick={(e) => {
+                      setPayamount(
+                        Number(ethers.utils.formatEther(data[2].toString()))
+                      );
+                    }}
+                  >
+                    Max
+                  </Button>
+                </div>
+                <div className="w-[50%]">
+                  <Input
+                    placeholder="Please amount you want to pay"
+                    type="number"
+                    className="w-full"
+                    value={payamount}
+                    onChange={(e) => {
+                      setPayamount(Number(e.target.value));
+                      // BigInt(parseFloat(e.target.value) * 1000000000000000000)
+                    }}
+                  />
+                </div>
+                <div className="w-[50%]">
+                  {!flagLoanpay ? (
+                    <Approve amount={BigInt(payamount * 1000000000000000000)} />
+                  ) : (
+                    <PayLoanAmount
+                      amount={BigInt(payamount * 1000000000000000000)}
+                      loanid={params.loanid}
+                    />
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -183,9 +192,9 @@ const page = ({ params }: { params: { loanid: bigint } }) => {
 
   return (
     <div className="flex justify-center items-center">
-      Please refresh the page if page is blank
+      Please refresh the Page if page is blank
     </div>
   );
 };
 
-export default page;
+export default Page;

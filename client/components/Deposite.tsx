@@ -25,7 +25,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
     } catch (e) {
       console.log(e);
     }
-  }, [collatoral]);
+  }, [collatoral, write]);
 
   if (isLoading) {
     return (
@@ -36,8 +36,6 @@ export function Deposit({ collatoral }: { collatoral: number }) {
   }
 
   if (isSuccess) {
-    setFlagDeposit(true);
-    console.log(data);
     setTimeout(() => {
       setFlagDeposit(true);
     }, 5000);
