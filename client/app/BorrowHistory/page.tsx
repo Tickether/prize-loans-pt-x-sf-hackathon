@@ -43,10 +43,10 @@ function Repay() {
     const num: bigint = data[data?.length - 1];
 
     return (
-      <div>
+      <div className="pt-44 flex   items-center flex-col gap-10 ">
         {data?.map((item, index) => {
           return (
-            <div className="flex justify-center gap-10" key={index}>
+            <div className=" flex justify-center w-full " key={index}>
               <TokenData num={item} />
             </div>
           );
@@ -89,7 +89,7 @@ const TokenData = ({ num }: { num: bigint }) => {
           currentTimestampInSeconds < data[6]
             ? "bg-blue-400 text-black"
             : "bg-red-500"
-        } h-fit max-w-[80%]   rounded-md border p-4`}
+        } h-fit max-w-[80%]  rounded-md border p-4`}
       >
         <div>
           <div className="flex w-full flex-col gap-7">
@@ -131,8 +131,13 @@ const TokenData = ({ num }: { num: bigint }) => {
           </div>
 
           {currentTimestampInSeconds < data[6] ? (
-            <div className="flex justify-end gap-10  pt-10 ml-[30px] text-xl font-bold ">
-              <Link href={`/Repay/${num}`}>Click here to Pay your loan</Link>
+            <div className="flex justify-center gap-10  pt-10 ml-[30px] text-xl font-bold ">
+              <Link
+                className="border-solid border-2 border-white p-3 rounded-3xl"
+                href={`/Repay/${num}`}
+              >
+                Click here to Pay your Loan
+              </Link>
             </div>
           ) : (
             <div className="text-4xl flex items-center font-bold border-t-2 flex-col  border-black pt-10 text-black">
