@@ -61,11 +61,11 @@ const TokenData = React.memo(
       console.log("fowesj");
     }, [data]);
     if (isLoading) {
-      return <div>Your Data is loading Please Wait .....</div>;
+      return <div>Your Data is loading. Please Wait .....</div>;
     }
 
     if (isError) {
-      return <div>We get some error ........</div>;
+      return <div>We got some error ........</div>;
     }
 
     if (isSuccess && data) {
@@ -90,13 +90,13 @@ const TokenData = React.memo(
             <TableRow>
               <TableCell colSpan={3}>ColateralAmount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[1].toString())}/pweth`}
+                {`${ethers.utils.formatEther(data[1].toString())}/pWETH`}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3}>Loan Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[2].toString())}/weth`}
+                {`${ethers.utils.formatEther(data[2].toString())}/WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
