@@ -95,9 +95,9 @@ export default function CardWithForm() {
       <div className=" flex flex-row mb-[6%]   h-fit rounded-3xl p-1  max-h-[70%]">
         <Card className="w-fit  min-h-[400px]  h-fit  ">
           <CardHeader>
-            <CardTitle>Borrow Against PWETH</CardTitle>
+            <CardTitle>Borrow Against pWETH</CardTitle>
             <CardDescription>
-              you can take as much as 90% of you pweth
+              you can take as much as 90% of you pWETH
             </CardDescription>
           </CardHeader>
           <CardContent className="flex  flex-row">

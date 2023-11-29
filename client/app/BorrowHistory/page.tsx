@@ -113,11 +113,11 @@ const TokenData = ({ num }: { num: bigint }) => {
             <div className="w-full flex h-fit ">
               <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
                 Collateral amount <br />
-                {`${ethers.utils.formatEther(data[1].toString())}/pweth`}
+                {`${ethers.utils.formatEther(data[1].toString())}/pWETH`}
               </div>
               <div className="flex justify-end ml-[30px] text-xl font-bold ">
                 Loan Amount <br />
-                {`${ethers.utils.formatEther(data[2].toString())}/weth`}
+                {`${ethers.utils.formatEther(data[2].toString())}/WETH`}
               </div>
             </div>
             <div className="w-full flex h-fit ">
