@@ -70,11 +70,11 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
     }
   }
   if (isLoading) {
-    return <div>Your Data is loading Please Wait .....</div>;
+    return <div>Your Data is loading. Please Wait .....</div>;
   }
 
   if (isError) {
-    return <div>We get some error ........</div>;
+    return <div>We got some error ........</div>;
   }
 
   if (isSuccess && data) {
@@ -145,7 +145,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                   DeleteExistingFlow(data[4]);
                 }}
               >
-                Delete Your Intrest stream All Loan is paid❤️
+                Delete Your Interest stream All Loan is paid❤️
               </Button>
             ) : (
               <div className="flex gap-2 ">

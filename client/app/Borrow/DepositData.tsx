@@ -61,11 +61,11 @@ const TokenData = React.memo(
       console.log("fowesj");
     }, [data]);
     if (isLoading) {
-      return <div>Your Data is loading Please Wait .....</div>;
+      return <div>Your Data is loading. Please Wait .....</div>;
     }
 
     if (isError) {
-      return <div>We get some error ........</div>;
+      return <div>We got some error ........</div>;
     }
 
     if (isSuccess && data) {

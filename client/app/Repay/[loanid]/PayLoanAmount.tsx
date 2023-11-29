@@ -17,12 +17,12 @@ const PayLoanAmount = ({
   });
 
   if (isLoading) {
-    return <div>Loading please wait</div>;
+    return <div>Loading. Please wait</div>;
   }
   if (isSuccess) {
     return (
       <div>
-        Payment completed Please refresh and check your hitory your transaction
+        Payment completed. Please refresh and check your transaction history
         hash {data?.hash}
       </div>
     );
