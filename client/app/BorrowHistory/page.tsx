@@ -145,7 +145,7 @@ const TokenData = ({ num }: { num: bigint }) => {
                 className="border-solid border-2 bg-black border-white p-3 rounded-3xl"
                 href={`/Repay/${num}`}
               >
-                Click here to Withdraw your Collatoral
+                Click here to Withdraw your Collateral
               </Link>
             </div>
           )}
