@@ -17,7 +17,7 @@ const PayLoanAmount = ({
   });
 
   if (isLoading) {
-    return <div>Loading please wait</div>;
+    return <div className="w-fit">Loading please wait</div>;
   }
   if (isSuccess) {
     return (
