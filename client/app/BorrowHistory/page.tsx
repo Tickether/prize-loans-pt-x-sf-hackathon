@@ -122,10 +122,12 @@ const TokenData = ({ num }: { num: bigint }) => {
             </div>
             <div className="w-full flex h-fit ">
               <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                Lending time : {`${disbursTime.toString().slice(4, 25)}`}
+                Loan Start Date <br />
+                {`${disbursTime.toString().slice(4, 25)}`}
               </div>
               <div className="flex justify-end ml-[30px] text-xl font-bold ">
-                Loan Expiry Date {`${ExpireTime.toString().slice(4, 25)}`}
+                Loan Expiry Date <br />
+                {`${ExpireTime.toString().slice(4, 25)}`}
               </div>
             </div>
           </div>

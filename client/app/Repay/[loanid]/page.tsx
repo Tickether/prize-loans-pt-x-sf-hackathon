@@ -100,13 +100,13 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
             <TableRow>
               <TableCell colSpan={3}>Collateral Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[1].toString())}/pWETH`}
+                {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3}>Loan Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[2].toString())}/WETH`}
+                {`${ethers.utils.formatEther(data[2].toString())} WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -125,7 +125,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan disburse Time </TableCell>
+              <TableCell colSpan={3}>Loan Start Date </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>

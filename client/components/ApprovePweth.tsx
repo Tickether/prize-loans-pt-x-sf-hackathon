@@ -72,7 +72,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
           variant="destructive"
           onClick={() => Verifying()}
         >
-          ` Approve ${amount}/pWETH `
+           Approve {amount} pWETH 
         </Button>
       ) : (
         <div className="flex justify-center m-3 border-solid border-2 p-3 border-green-400 rounded-2xl">

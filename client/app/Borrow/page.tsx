@@ -107,8 +107,8 @@ export default function CardWithForm() {
                   <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
                       <Accordions
-                        quetion="What is your Collateral balance ?"
-                        ans="Your Collateral balance is the pWETH token that you have in your connected wallet."
+                        quetion="What is your Collateral Balance ?"
+                        ans="Your Collateral Balance is the pWETH token amount that you hold in your connected wallet."
                       />
                       <div className="flex flex-row border-solid border-2 m-3 p-3 rounded-2xl border-sky-500 justify-between">
                         <Label htmlFor="name">Collateral balance</Label>
@@ -164,15 +164,15 @@ export default function CardWithForm() {
                       )}
 
                       <Accordions
-                        quetion="What is Interest/year ?"
+                        quetion="What is your yearly Interest ?"
                         ans="Our application charges 3.4% interest rate for the loan amount and you have to pay interest in Stream by Superfluid"
                       />
                       <div className="flex justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
-                        <Label>Interest/year </Label>
+                        <Label>Yearly Interest </Label>
                         {flag && collatoral ? (
-                          <Label> {intrest.slice(0, 8)} / eth</Label>
+                          <Label> {intrest.slice(0, 8)} ETH</Label>
                         ) : (
-                          <Label>0 / eth</Label>
+                          <Label>0 ETH</Label>
                         )}
                       </div>
                     </div>
