@@ -135,7 +135,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Remain Amount </TableCell>
+              <TableCell colSpan={3}>Remaining Amount </TableCell>
               <TableCell className="text-right">
                 {`${ethers.utils.formatEther(data[2] - data[3])}/weth`}
               </TableCell>
