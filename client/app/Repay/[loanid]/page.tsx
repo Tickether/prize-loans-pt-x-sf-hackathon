@@ -92,7 +92,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
     const disbursTime = new Date(Number(data[5]) * 1000);
     const ExpireTime = new Date(Number(data[6]) * 1000);
     return (
-      <div className="h-[100vh] flex justify-center mt-[7%]">
+      <div className="h-[100vh] flex justify-center pt-[7%]">
         <div className=" border-solid p-4 border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
             Loan Details
