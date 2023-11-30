@@ -170,7 +170,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                   </Button>
                 ) : (
                   <div className="bg-green-300 p-3 rounded-2xl">
-                    Your intrest Stream is Delteded Successfully
+                    Your Interest Stream has bee successfully stopped
                   </div>
                 )}
               </>
