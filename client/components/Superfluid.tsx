@@ -14,9 +14,10 @@ export default function Superfluid({
   amount,
   reciver,
 }: {
-  amount: string;
+  amount: number;
   reciver: string;
 }) {
+  console.log(amount.toFixed(15).toString());
   const [flag, setflag] = useState(false);
   const paymentDetails: WidgetProps["paymentDetails"] = {
     paymentOptions: [
@@ -27,7 +28,7 @@ export default function Superfluid({
           address: "0xE01F8743677Da897F4e7De9073b57Bf034FC2433",
         },
         flowRate: {
-          amountEther: amount,
+          amountEther: amount.toFixed(15).toString(),
           period: "month",
         },
       },
@@ -121,7 +122,7 @@ export default function Superfluid({
                   )}
                 </SuperfluidWidget>
               ) : (
-                <div className="bg-green-300 border-solid border-2  border-white">
+                <div className="bg-green-400 rounded-2xl font-bold text-black p-3 border-solid border-2  border-white">
                   <Link href="BorrowHistory"> Check your Loan details</Link>
                 </div>
               )}

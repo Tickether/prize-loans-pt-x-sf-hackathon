@@ -18,9 +18,11 @@ export function Deposit({ collatoral }: { collatoral: number }) {
 
   const handleClick = React.useCallback(() => {
     try {
-      console.log(BigInt(collatoral * 1000000000000000000));
+      console.log(
+        BigInt(parseInt((collatoral * 1000000000000000000).toString()))
+      );
       write({
-        args: [BigInt(collatoral * 1000000000000000000)],
+        args: [BigInt(parseInt((collatoral * 1000000000000000000).toString()))],
       });
     } catch (e) {
       console.log(e);
@@ -38,7 +40,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
   if (isSuccess) {
     setTimeout(() => {
       setFlagDeposit(true);
-    }, 5000);
+    }, 3000);
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 bg-green-400 border-white rounded-2xl">
         Deposit of {collatoral} pWETH complete

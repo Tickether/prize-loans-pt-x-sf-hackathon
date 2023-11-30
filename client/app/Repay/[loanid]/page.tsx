@@ -85,7 +85,11 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   }
 
   if (isError) {
-    return <div>We got some error ........</div>;
+    return (
+      <div className="flex justify-center items-center w-full h-full">
+        We got some error ........
+      </div>
+    );
   }
 
   if (isSuccess && data) {
@@ -206,10 +210,18 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                 </div>
                 <div className="w-fit">
                   {!flagLoanpay ? (
-                    <Approve amount={BigInt(payamount * 1000000001000000000)} />
+                    <Approve
+                      amount={BigInt(
+                        parseInt(
+                          (payamount * 1000000000000000000 + 1).toString()
+                        )
+                      )}
+                    />
                   ) : (
                     <PayLoanAmount
-                      amount={BigInt(payamount * 1000000000000000000)}
+                      amount={BigInt(
+                        parseInt((payamount * 1000000000000000000).toString())
+                      )}
                       loanid={params.loanid}
                     />
                   )}

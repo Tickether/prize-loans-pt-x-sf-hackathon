@@ -6,12 +6,8 @@ import { useMyContext } from "../AppContext";
 import { ethers } from "ethers";
 import {
   Table,
-  TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
@@ -20,7 +16,7 @@ const DepositData = ({
   amount,
 }: {
   address: string;
-  amount: string;
+  amount: number;
 }) => {
   const { flagDeposit } = useMyContext();
   const [dataDo, setDataDo] = React.useState<readonly bigint[]>();
@@ -50,7 +46,8 @@ const DepositData = ({
 export default DepositData;
 
 const TokenData = React.memo(
-  ({ num, amount }: { num: bigint; amount: string }) => {
+  ({ num, amount }: { num: bigint; amount: number }) => {
+    const { flagDeposit } = useMyContext();
     const { data, isError, isLoading, isSuccess } = useContractRead({
       address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
       abi: pweethyABI,
@@ -59,7 +56,7 @@ const TokenData = React.memo(
     });
     useEffect(() => {
       console.log("fowesj");
-    }, [data]);
+    }, [data, flagDeposit]);
     if (isLoading) {
       return <div>Your Data is loading. Please Wait .....</div>;
     }
