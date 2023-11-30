@@ -47,7 +47,7 @@ export default DepositData;
 
 const TokenData = React.memo(
   ({ num, amount }: { num: bigint; amount: number }) => {
-    const { flagDeposit } = useMyContext();
+   
     const { data, isError, isLoading, isSuccess } = useContractRead({
       address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
       abi: pweethyABI,
@@ -56,7 +56,7 @@ const TokenData = React.memo(
     });
     useEffect(() => {
       console.log("fowesj");
-    }, [data, flagDeposit]);
+    }, [data]);
     if (isLoading) {
       return <div>Your Data is loading. Please Wait .....</div>;
     }
