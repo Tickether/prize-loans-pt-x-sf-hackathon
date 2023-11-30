@@ -53,7 +53,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 border-white rounded-2xl">
         {" "}
-        Loading Please wait......
+        Loading. Please wait......
       </div>
     );
   }
@@ -74,7 +74,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
           variant="destructive"
           onClick={() => Verifying()}
         >
-          ` Approve ${amount}/pweth `
+           Approve {amount} pWETH 
         </Button>
       ) : (
         <div className="flex justify-center m-3 border-solid border-2 p-3 border-green-400 rounded-2xl">

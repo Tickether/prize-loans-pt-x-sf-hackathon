@@ -36,7 +36,7 @@ export default function Superfluid({
 
   const productDetails: ProductDetails = {
     name: "Pweethy",
-    description: "Start Payment of 3.4% of Total loan  amount",
+    description: "Start Payment of 3.4% Yearly Interest",
     imageURI: "",
   };
   const thems: ThemeOptions = {

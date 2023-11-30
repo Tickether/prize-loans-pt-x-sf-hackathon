@@ -43,7 +43,7 @@ const PayLoanAmount = ({
         write({ args: [amount, loanid] });
       }}
     >
-      Pay Loan
+      Pay Back Loan
     </Button>
   );
 };

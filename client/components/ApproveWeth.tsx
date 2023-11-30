@@ -63,12 +63,14 @@ const Approve = React.memo(({ amount }: { amount: bigint }) => {
         variant="destructive"
         onClick={() => Verifying()}
       >
-        Approve Weth
+        Approve WETH
       </Button>
     </div>
   );
 });
 
 export default Approve;
+
+Approve.displayName = "ApproveWeth";
 
 Approve.displayName = "ApproveWeth";

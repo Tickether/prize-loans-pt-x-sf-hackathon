@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordions } from "@/components/Accordation";
@@ -90,9 +91,9 @@ export default function CardWithForm() {
       <div className=" flex flex-row mb-[6%]   h-fit rounded-3xl p-1  max-h-[70%]">
         <Card className="w-fit  min-h-[400px]  h-fit  ">
           <CardHeader>
-            <CardTitle>Borrow Against PWETH</CardTitle>
+            <CardTitle>Borrow Against pWETH</CardTitle>
             <CardDescription>
-              you can take as much as 90% of you pweth
+              you can take as much as 90% of you pWETH
             </CardDescription>
           </CardHeader>
           <CardContent className="flex  flex-row">
@@ -102,21 +103,21 @@ export default function CardWithForm() {
                   <div className="grid w-full items-center gap-4">
                     <div className="flex flex-col space-y-1.5">
                       <Accordions
-                        quetion="What is Collatoral balance ?"
-                        ans="Collatoral balance is the Pweth token that you have in your connected wallet."
+                        quetion="What is your Collateral Balance ?"
+                        ans="Your Collateral Balance is the pWETH token amount that you hold in your connected wallet."
                       />
                       <div className="flex flex-row border-solid border-2 m-3 p-3 rounded-2xl border-sky-500 justify-between">
-                        <Label htmlFor="name">Collatoral balance</Label>
-                        {data?.formatted?.slice(0, 10)} PWeth
+                        <Label htmlFor="name">Collateral balance</Label>
+                        {data?.formatted?.slice(0, 10)} pWETH
                       </div>
                       <Accordions
-                        quetion="What is Collatoral Amount ?"
-                        ans="Collatoral Amount is amount of token which you want to stake in our smartcontract for loan you can take loan as much as 90%"
+                        quetion="What is your Collateral Amount ?"
+                        ans="Your Collateral Amount is amount of token which you want to stake in our smart contract for loan you can take loan as much as 90%"
                       />
                       <div className="border-solid border-2  rounded-2xl border-sky-500">
                         <div className="flex flex-row justify-between m-3 p-3 ">
                           <div className="flex items-center justify-center">
-                            <Label htmlFor="name">Collatoral Amount</Label>
+                            <Label htmlFor="name">Collateral Amount</Label>
                           </div>
                           <Input
                             id="name"
@@ -128,12 +129,13 @@ export default function CardWithForm() {
                             value={collatoral}
                           />
                         </div>
-                        {}
+
                         <div className="border-b-4 border-sky-500"></div>
                         <div className="flex flex-row justify-between  m-3 p-3 ">
                           <div className="flex items-center justify-center">
                             <Label htmlFor="name">Loan Amount</Label>
                           </div>
+
                           <Input
                             id="name"
                             type="number"
@@ -153,20 +155,20 @@ export default function CardWithForm() {
                         </div>
                       ) : (
                         <div className="text-red-500 m-3 flex justify-center">
-                          ⚠️Please enter the collatoral amount
+                          ⚠️Please enter the collateral amount
                         </div>
                       )}
 
                       <Accordions
-                        quetion="What is Intrest/year ?"
-                        ans="Our application charge 3.4% interest rate for the loan amount and you have to pay intrest in Stream by Superfluid"
+                        quetion="What is your yearly Interest ?"
+                        ans="Our application charges 3.4% interest rate for the loan amount and you have to pay interest in Stream by Superfluid"
                       />
                       <div className="flex justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
-                        <Label>Interest/year </Label>
+                        <Label>Yearly Interest </Label>
                         {flag && collatoral ? (
-                          <Label> {intrest.slice(0, 8)} / eth</Label>
+                          <Label> {intrest.slice(0, 8)} ETH</Label>
                         ) : (
-                          <Label>0 / eth</Label>
+                          <Label>0 ETH</Label>
                         )}
                       </div>
                     </div>

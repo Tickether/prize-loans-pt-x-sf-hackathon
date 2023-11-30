@@ -23,15 +23,18 @@ const DepositData = ({
   amount: string;
 }) => {
   const { flagDeposit } = useMyContext();
-
+  const [dataDo, setDataDo] = React.useState<readonly bigint[]>();
   const { data, isError, isLoading, isSuccess } = useContractRead({
     address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
     abi: pweethyABI,
     functionName: "getBorrowerLoans",
     args: [`0x${address.slice(2)}`],
   });
+
   useEffect(() => {
-    console.log("recalculate");
+    if (data) {
+      setDataDo(data);
+    }
   }, [flagDeposit]);
   if (isLoading) {
     return <div> Processing transaction Hash......</div>;
@@ -58,11 +61,11 @@ const TokenData = React.memo(
       console.log("fowesj");
     }, [data]);
     if (isLoading) {
-      return <div>Your Data is loading Please Wait .....</div>;
+      return <div>Your Data is loading. Please Wait .....</div>;
     }
 
     if (isError) {
-      return <div>We get some error ........</div>;
+      return <div>We got some error ........</div>;
     }
 
     if (isSuccess && data) {
@@ -72,7 +75,7 @@ const TokenData = React.memo(
       return (
         <div>
           <div className="flex justify-center text-3xl font-bold">
-            Loan Detail
+            Loan Details
           </div>
           <Table>
             <TableRow>
@@ -85,19 +88,19 @@ const TokenData = React.memo(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>ColateralAmount</TableCell>
+              <TableCell colSpan={3}>Collateral Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[1].toString())}/pweth`}
+                {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3}>Loan Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[2].toString())}/weth`}
+                {`${ethers.utils.formatEther(data[2].toString())} WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>LoanPayableAddress</TableCell>
+              <TableCell colSpan={3}>Loan Payable Address</TableCell>
               <TableCell className="text-right">
                 {`${data[4].slice(0, 4)}....${data[4].slice(
                   data[0].length - 4,
@@ -106,7 +109,7 @@ const TokenData = React.memo(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan disburs Time </TableCell>
+              <TableCell colSpan={3}>Loan Start Date </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>
@@ -117,7 +120,7 @@ const TokenData = React.memo(
                 {`${ExpireTime.toString().slice(4, 25)}`}
               </TableCell>
             </TableRow>
-            <TableCaption>Please Start Strem for intrest</TableCaption>
+            <TableCaption>Please Start Stream for interest payment</TableCaption>
           </Table>
           <div className="mt-4 flex justify-center">
             <Superfluid amount={amount} reciver={data[4]} />

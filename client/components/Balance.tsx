@@ -13,14 +13,14 @@ function Balance({ token }: { token: string }) {
   console.log(`${isError} y error h `);
   if (data?.formatted == "0") {
     toast({
-      title: "You don't have Pweth",
-      description: "stake your Weth and get Pweth from PoolTogether",
+      title: "You don't have pWETH",
+      description: "Stake your WETH and get pWETH from PoolTogether",
       action: (
-        <ToastAction altText="GO stake Some Weth on PoolTogether"></ToastAction>
+        <ToastAction altText="Go stake some WETH on PoolTogether"></ToastAction>
       ),
     });
   }
-  if (!address) return <div> connect wallet</div>;
+  if (!address) return <div> Connect wallet</div>;
   if (isLoading) return <div> Fetching balance…</div>;
 
   return <div>{data?.formatted} PWeth</div>;

@@ -30,20 +30,18 @@ export function Deposit({ collatoral }: { collatoral: number }) {
   if (isLoading) {
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 border-white rounded-2xl">
-        Loading Please wait......
+        Loading. Please wait......
       </div>
     );
   }
 
   if (isSuccess) {
-    setFlagDeposit(true);
-    console.log(data);
     setTimeout(() => {
       setFlagDeposit(true);
     }, 5000);
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 bg-green-400 border-white rounded-2xl">
-        Deposit of {collatoral}/eth Completed
+        Deposit of {collatoral} pWETH complete
       </div>
     );
   }
@@ -54,7 +52,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
       variant="outline"
       onClick={() => handleClick()}
     >
-      Deposit {collatoral}/PWeth ➡️ get {collatoral * 0.9}/eth
+      Deposit {collatoral}/pWETH ➡️ Get {collatoral * 0.9}/WETH
     </Button>
   );
 }

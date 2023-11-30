@@ -14,12 +14,14 @@ import Approve from "@/components/ApproveWeth";
 import { useMyContext } from "@/app/AppContext";
 import PayLoanAmount from "./PayLoanAmount";
 import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { pweethyABI } from "@/utils/pweethy";
 import { ethers } from "ethers";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 const Page = ({ params }: { params: { loanid: bigint } }) => {
   const { flagLoanpay } = useMyContext();
+  const [payamount, setPayamount] = React.useState<number>(0);
   const [payamount, setPayamount] = React.useState<number>(0);
   const provider = useEthersProvider();
   const signer = useEthersSigner();
@@ -81,11 +83,11 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   }
 
   if (isLoading) {
-    return <div>Your Data is loading Please Wait .....</div>;
+    return <div>Your Data is loading. Please Wait .....</div>;
   }
 
   if (isError) {
-    return <div>We get some error ........</div>;
+    return <div>We got some error ........</div>;
   }
 
   if (isSuccess && data) {
@@ -96,7 +98,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
       <div className="h-[100vh] flex justify-center mt-[7%]">
         <div className=" min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
-            Loan Detail
+            Loan Details
           </div>
           <Table>
             <TableRow>
@@ -120,19 +122,19 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
             <TableRow>
               <TableCell colSpan={3}>ColateralAmount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[1].toString())}/pweth`}
+                {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3}>Loan Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[2].toString())}/weth`}
+                {`${ethers.utils.formatEther(data[2].toString())} WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>LoanAmount Paid</TableCell>
+              <TableCell colSpan={3}>Loan Amount Paid</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[3].toString())}/weth`}
+                {`${ethers.utils.formatEther(data[3].toString())}/WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -143,7 +145,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
             </TableRow>
 
             <TableRow>
-              <TableCell colSpan={3}>Loan disburs Time </TableCell>
+              <TableCell colSpan={3}>Loan Start Date </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>
@@ -224,7 +226,8 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
 
   return (
     <div className="flex justify-center items-center">
-      Please refresh the Page if page is blank
+      Please refresh the Page if page is blank Please refresh the Page if page
+      is blank
     </div>
   );
 };
