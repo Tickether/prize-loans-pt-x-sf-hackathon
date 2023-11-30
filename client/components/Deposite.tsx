@@ -40,7 +40,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
   if (isSuccess) {
     setTimeout(() => {
       setFlagDeposit(true);
-    }, 3000);
+    }, 5000);
     return (
       <div className="flex justify-center m-3 border-solid border-2 p-3 bg-green-400 border-white rounded-2xl">
         Deposit of {collatoral} pWETH complete
