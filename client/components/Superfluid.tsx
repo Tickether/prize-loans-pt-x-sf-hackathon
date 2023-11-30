@@ -122,7 +122,7 @@ export default function Superfluid({
                 </SuperfluidWidget>
               ) : (
                 <div>
-                  <Link href="BorrowHistory"> Check your Loan detail</Link>
+                  <Link href="BorrowHistory"> Check your Loan details</Link>
                 </div>
               )}
             </>
