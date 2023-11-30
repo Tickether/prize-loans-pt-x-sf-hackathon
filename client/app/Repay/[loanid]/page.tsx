@@ -72,7 +72,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
     } catch (error) {
       toast({
         title:
-          "we are getting error check if you have any intrest Stream or not ",
+          "We are getting an error.  Check if you have any running Interest Stream or not ",
         variant: "destructive",
       });
       console.log(error);
