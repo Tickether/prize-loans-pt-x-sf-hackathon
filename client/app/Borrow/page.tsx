@@ -45,8 +45,8 @@ export default function CardWithForm() {
     if (data?.formatted == "0") {
       toast({
         variant: "destructive",
-        title: "Not Enough Balance",
-        description: "Please first get some token by staking in PoolTogether",
+        title: "Insufficient Balance",
+        description: "Please get some token first by staking in PoolTogether",
       });
     }
   }, [data, toast]);
