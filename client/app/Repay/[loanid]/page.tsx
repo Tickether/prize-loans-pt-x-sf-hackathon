@@ -13,7 +13,7 @@ import { useContractRead } from "wagmi";
 import Approve from "@/components/ApproveWeth";
 import { useMyContext } from "@/app/AppContext";
 import PayLoanAmount from "./PayLoanAmount";
-import { Button } from "@/components/ui/button";
+
 import { Button } from "@/components/ui/button";
 import { pweethyABI } from "@/utils/pweethy";
 import { ethers } from "ethers";
@@ -21,11 +21,11 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 const Page = ({ params }: { params: { loanid: bigint } }) => {
   const { flagLoanpay } = useMyContext();
-  const [payamount, setPayamount] = React.useState<number>(0);
+
   const [payamount, setPayamount] = React.useState<number>(0);
   const provider = useEthersProvider();
   const signer = useEthersSigner();
-  console.log(params);
+
   const { data, isError, isLoading, isSuccess } = useContractRead({
     address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
     abi: pweethyABI,
@@ -38,8 +38,6 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
     console.log("fowesj");
   }, [data]);
   async function DeleteExistingFlow(recipient: string) {
-    console.log(recipient);
-    console.log(provider);
     setLoadingFlag(true);
 
     try {
@@ -91,12 +89,11 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   }
 
   if (isSuccess && data) {
-    console.log(data);
     const disbursTime = new Date(Number(data[5]) * 1000);
     const ExpireTime = new Date(Number(data[6]) * 1000);
     return (
       <div className="h-[100vh] flex justify-center mt-[7%]">
-        <div className=" min-w-[60%] flex justify-center items-center flex-col">
+        <div className=" border-solid border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
             Loan Details
           </div>
@@ -226,10 +223,10 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
 
   return (
     <div className="flex justify-center items-center">
-      Please refresh the Page if page is blank Please refresh the Page if page
-      is blank
+      Please refresh the Page if page is blank
     </div>
   );
 };
 
+export const runtime = "edge";
 export default Page;
