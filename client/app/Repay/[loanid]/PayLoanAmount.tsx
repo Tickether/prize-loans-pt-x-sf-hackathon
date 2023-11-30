@@ -11,7 +11,7 @@ const PayLoanAmount = ({
   loanid: bigint;
 }) => {
   const { data, write, isLoading, isSuccess } = useContractWrite({
-    address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
+    address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
     abi: pweethyABI,
     functionName: "payLoanAmount",
   });

@@ -20,7 +20,7 @@ const Approve = React.memo(({ amount }: { amount: bigint }) => {
     functionName: "allowance",
     args: [
       `0x${address?.slice(2)}`,
-      "0x4EC74b34dd8190f02E7d13e00393716981b2BADE",
+      "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
     ],
   });
 
@@ -38,7 +38,7 @@ const Approve = React.memo(({ amount }: { amount: bigint }) => {
     } else {
       setVerifyFlag(false);
       write({
-        args: [`0x${"4EC74b34dd8190f02E7d13e00393716981b2BADE"}`, amount],
+        args: [`0x${"E6dD6265Eb872cEF38F969A9bF6a3f41626b0f46"}`, amount],
       });
     }
   }

@@ -20,7 +20,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
     functionName: "allowance",
     args: [
       `0x${address?.slice(2)}`,
-      "0x4EC74b34dd8190f02E7d13e00393716981b2BADE",
+      "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
     ],
   });
 
@@ -42,7 +42,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
       setVerifyFlag(false);
       write({
         args: [
-          `0x${"4EC74b34dd8190f02E7d13e00393716981b2BADE"}`,
+          `0x${"E6dD6265Eb872cEF38F969A9bF6a3f41626b0f46"}`,
           BigInt(amount * 1000001000000000000),
         ],
       });
@@ -74,7 +74,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
           variant="destructive"
           onClick={() => Verifying()}
         >
-           Approve {amount} pWETH 
+          Approve {amount} pWETH
         </Button>
       ) : (
         <div className="flex justify-center m-3 border-solid border-2 p-3 border-green-400 rounded-2xl">
