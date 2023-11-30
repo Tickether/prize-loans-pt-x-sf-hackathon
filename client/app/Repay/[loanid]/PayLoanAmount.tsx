@@ -31,7 +31,7 @@ const PayLoanAmount = ({
             window.open(link, "_blank");
             toast({
               title:
-                "Your Payment is completed please refresh the page and collect colletral",
+                "Your Payment is complete. Please refresh the page and collect collateral",
               variant: "success",
             });
           }}
