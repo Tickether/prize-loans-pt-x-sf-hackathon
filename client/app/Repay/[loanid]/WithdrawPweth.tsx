@@ -15,13 +15,13 @@ const WithdrawPweth = ({ loanId }: { loanId: bigint }) => {
   if (isLoading) {
     return (
       <div className="border-solid border-2 flex justify-center p-3 border-white">
-        Loading Please wait
+        Loading. Please wait
       </div>
     );
   }
   if (isError) {
     toast({
-      title: "You can't withdraw now Please Pay all your due",
+      title: "You can't withdraw now. Please pay all your due",
       variant: "destructive",
     });
   }
@@ -39,7 +39,7 @@ const WithdrawPweth = ({ loanId }: { loanId: bigint }) => {
           Check transaction
         </Button>
         <div className="text-red-600 flex justify-center">
-          You can Delete your Stream Now ⚠️
+          You can stop your Stream Now ⚠️
         </div>
       </div>
     );
@@ -51,7 +51,7 @@ const WithdrawPweth = ({ loanId }: { loanId: bigint }) => {
         write();
       }}
     >
-      withdraw your Collatoral
+      Withdraw your Collatoral
     </Button>
   );
 };
