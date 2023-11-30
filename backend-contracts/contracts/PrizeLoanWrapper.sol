@@ -208,7 +208,6 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     // take stream prof
     function takeLoanProfits(uint256 loanId) external onlyOwner { 
      
-       
         uint256 deposit = getDepositedFlow(loanId);
         
         //release interest amount(must be liquidatooor)
@@ -225,30 +224,38 @@ contract PrizeLoanWrapper is ERC721, IERC666, Ownable, ReentrancyGuard {
     function takeProfitsBulk(uint256 loanId) external {
     }
     */
+    //
+    function getExpectedDoposit (uint256 loanId) public view returns(uint256) {
+        uint64 loanPeriod = loanRepayDate[loanId] - borrowers[loanId].loanDate;
+        require(loanPeriod > uint64(21600), 'pweeth not paid or paid early');
 
+        uint256 loanInterest = borrowers[loanId].loanAmount * 34 / 1000;
+        uint64 loanGraceDate = borrowers[loanId].loanDate - uint64(21600); /*grace period*/
+        uint64 loanPeriodGrace = loanRepayDate[loanId] - loanGraceDate;
+        uint256 expectedDeposit =  loanInterest * uint256(loanPeriodGrace) / 31556926; 
+        return expectedDeposit;
+    }
 
     // who gets right to collateral after loan repay or expiry
     function liquidaterOfCollateral(uint256 loanId) public view virtual override returns(address){
         
-        uint64 payDate = loanRepayDate[loanId];
-        
-        if (payDate == 0) {
+        if (loanRepayDate[loanId] == 0) {
             return owner();
         } else {
-            
-            uint256 loanInterest = borrowers[loanId].loanAmount * 34 / 1000;
-            uint64 loanGraceDate = borrowers[loanId].loanDate - uint64(86400); /*grace period */
-            uint64 loanPeriod = payDate - loanGraceDate;
-            uint256 expectedDeposit = uint256(loanPeriod) * loanInterest; 
-            uint256 deposit = getDepositedFlow(loanId);
-            // check stream paid
-            if (deposit >= expectedDeposit) {
-                return  borrowers[loanId].borrower;
+            uint64 loanPeriod = loanRepayDate[loanId] - borrowers[loanId].loanDate;
+            if ( loanPeriod <= uint64(21600)) {
+                return borrowers[loanId].borrower;
             } else {
-                return owner();
+                uint256 expectedDeposit = getExpectedDoposit(loanId); 
+                uint256 deposit = getDepositedFlow(loanId);
+                // check stream paid
+                if (deposit >= expectedDeposit) {
+                    return borrowers[loanId].borrower;
+                } else {
+                    return owner();
+                }
             }
         }
-        
     }
 
     function getBorrowerLoans(address borrower) external view returns (uint256[] memory) {
