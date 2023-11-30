@@ -31,7 +31,7 @@ const DepositData = ({
     if (data) {
       setDataDo(data);
     }
-  }, [flagDeposit]);
+  }, [flagDeposit ,data]);
   if (isLoading) {
     return <div> Processing transaction Hash......</div>;
   }
