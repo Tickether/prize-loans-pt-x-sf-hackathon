@@ -54,7 +54,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
       variant="outline"
       onClick={() => handleClick()}
     >
-      Deposit {collatoral}/pWETH ➡️ Get {collatoral * 0.9}/WETH
+      Deposit {collatoral} pWETH ➡️ Get {collatoral * 0.9} WETH
     </Button>
   );
 }
