@@ -21,7 +21,7 @@ function Repay() {
   const { address } = useAccount();
 
   const { data, isError, isLoading, isSuccess } = useContractRead({
-    address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
+    address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
     abi: pweethyABI,
     functionName: "getBorrowerLoans",
     args: [`0x${address?.slice(2)}`],
@@ -63,7 +63,7 @@ const TokenData = ({ num }: { num: bigint }) => {
   const signer = useEthersSigner();
 
   const { data, isError, isLoading, isSuccess } = useContractRead({
-    address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
+    address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
     abi: pweethyABI,
     functionName: "borrowers",
     args: [num],
@@ -86,9 +86,7 @@ const TokenData = ({ num }: { num: bigint }) => {
     return (
       <div
         className={`flex  item-center  ${
-          currentTimestampInSeconds < data[6]
-            ? "bg-blue-400 text-black"
-            : "bg-red-500"
+          data[3] >= data[2] ? "bg-blue-400 text-black" : "bg-red-500"
         } h-fit max-w-[80%]  rounded-md border p-4`}
       >
         <div>
@@ -112,27 +110,27 @@ const TokenData = ({ num }: { num: bigint }) => {
             </div>
             <div className="w-full flex h-fit ">
               <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                Collateral Amount <br />
+                Collateral Amount
                 {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </div>
               <div className="flex justify-end ml-[30px] text-xl font-bold ">
-                Loan Amount <br />
+                Loan Amount
                 {`${ethers.utils.formatEther(data[2].toString())} WETH`}
               </div>
             </div>
             <div className="w-full flex h-fit ">
               <div className="flex justify-start ml-[30px] w-[50%] text-xl font-bold ">
-                Loan Start Date <br />
+                Loan Start Date
                 {`${disbursTime.toString().slice(4, 25)}`}
               </div>
               <div className="flex justify-end ml-[30px] text-xl font-bold ">
-                Loan Expiry Date <br />
+                Loan Expiry Date
                 {`${ExpireTime.toString().slice(4, 25)}`}
               </div>
             </div>
           </div>
 
-          {currentTimestampInSeconds < data[6] ? (
+          {data[3] >= data[2] ? (
             <div className="flex justify-center gap-10  pt-10 ml-[30px] text-xl font-bold ">
               <Link
                 className="border-solid border-2 border-white p-3 rounded-3xl"
@@ -142,9 +140,13 @@ const TokenData = ({ num }: { num: bigint }) => {
               </Link>
             </div>
           ) : (
-            <div className="text-4xl flex items-center font-bold border-t-2 flex-col  border-black pt-10 text-black">
-              <p>Thanks for taking a loan from us 😊</p>
-              <p>This loan is closed</p>
+            <div className="flex justify-center gap-10  pt-10 ml-[30px] text-xl font-bold ">
+              <Link
+                className="border-solid border-2 bg-black border-white p-3 rounded-3xl"
+                href={`/Repay/${num}`}
+              >
+                Click here to Withdraw your Collateral
+              </Link>
             </div>
           )}
         </div>

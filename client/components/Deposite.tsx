@@ -11,7 +11,7 @@ export function Deposit({ collatoral }: { collatoral: number }) {
   const { setFlagDeposit, flagDeposit } = useMyContext();
   const { data, isLoading, isSuccess, write, isError, error } =
     useContractWrite({
-      address: "0x4EC74b34dd8190f02E7d13e00393716981b2BADE",
+      address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
       abi: pweethyABI,
       functionName: "collateralizedPrizeLoan",
     });

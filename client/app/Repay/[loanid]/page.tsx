@@ -13,7 +13,7 @@ import { useContractRead } from "wagmi";
 import Approve from "@/components/ApproveWeth";
 import { useMyContext } from "@/app/AppContext";
 import PayLoanAmount from "./PayLoanAmount";
-
+import WithdrawPweth from "./WithdrawPweth";
 import { Button } from "@/components/ui/button";
 import { pweethyABI } from "@/utils/pweethy";
 import { ethers } from "ethers";
@@ -27,7 +27,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   const signer = useEthersSigner();
 
   const { data, isError, isLoading, isSuccess } = useContractRead({
-    address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
+    address: "0xE6dD6265Eb872cEF38F969A9bF6a3f41626b0f46",
     abi: pweethyABI,
     functionName: "borrowers",
     args: [params.loanid],
@@ -92,8 +92,8 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
     const disbursTime = new Date(Number(data[5]) * 1000);
     const ExpireTime = new Date(Number(data[6]) * 1000);
     return (
-      <div className="h-[100vh] flex justify-center mt-[7%]">
-        <div className=" border-solid border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
+      <div className="h-[100vh] flex justify-center pt-[7%]">
+        <div className=" border-solid p-4 border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
             Loan Details
           </div>
@@ -157,9 +157,10 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
           <div className="mt-4 border-solid border-2 flex justify-around flex-col gap-4 w-[50%] p-3 rounded-lg border-blue-400">
             {data[3] >= data[2] ? (
               <>
+                <WithdrawPweth loanId={params.loanid} />
                 {!SuccessFlag ? (
                   <Button
-                    variant="success"
+                    variant="default"
                     onClick={() => {
                       DeleteExistingFlow(data[4].toString());
                     }}
@@ -205,7 +206,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                 </div>
                 <div className="w-fit">
                   {!flagLoanpay ? (
-                    <Approve amount={BigInt(payamount * 1000000000000000000)} />
+                    <Approve amount={BigInt(payamount * 1000000001000000000)} />
                   ) : (
                     <PayLoanAmount
                       amount={BigInt(payamount * 1000000000000000000)}
