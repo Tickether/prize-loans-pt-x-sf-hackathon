@@ -97,7 +97,7 @@ export default function Superfluid({
                       toast({
                         variant: "success",
                         title:
-                          "Your loan is completed Please check your Weth balance ",
+                          "Your loan is complete! Please check your WETH balance ",
                       });
                       setflag(true);
                     },
