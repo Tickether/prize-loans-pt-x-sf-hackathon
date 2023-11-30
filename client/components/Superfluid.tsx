@@ -4,9 +4,12 @@ import SuperfluidWidget, {
   WidgetProps,
   ProductDetails,
 } from "@superfluid-finance/widget";
-
+import Link from "next/link";
 import { ThemeOptions } from "@mui/material";
 import { Button } from "@/components/ui/button";
+import { toast } from "./ui/use-toast";
+import { useRouter } from "next/router";
+import { useState } from "react";
 export default function Superfluid({
   amount,
   reciver,
@@ -14,10 +17,7 @@ export default function Superfluid({
   amount: string;
   reciver: string;
 }) {
-  if (amount == "" || amount == "") {
-    return;
-  }
-
+  const [flag, setflag] = useState(false);
   const paymentDetails: WidgetProps["paymentDetails"] = {
     paymentOptions: [
       {
@@ -90,25 +90,41 @@ export default function Superfluid({
           };
           return (
             <>
-              <SuperfluidWidget
-                productDetails={productDetails}
-                paymentDetails={paymentDetails}
-                type="dialog"
-                theme={thems}
-                walletManager={walletManager}
-              >
-                {({ openModal }) => (
-                  <Button
-                    className="p-3 w-[70%]"
-                    variant="secondary"
-                    onClick={(e) => {
-                      openModal();
-                    }}
-                  >
-                    Start your interest payment💵
-                  </Button>
-                )}
-              </SuperfluidWidget>
+              {!flag ? (
+                <SuperfluidWidget
+                  eventListeners={{
+                    onSuccess: () => {
+                      toast({
+                        variant: "success",
+                        title:
+                          "Your loan is complete! Please check your WETH balance ",
+                      });
+                      setflag(true);
+                    },
+                  }}
+                  productDetails={productDetails}
+                  paymentDetails={paymentDetails}
+                  type="dialog"
+                  theme={thems}
+                  walletManager={walletManager}
+                >
+                  {({ openModal }) => (
+                    <Button
+                      className="p-3 w-[70%]"
+                      variant="secondary"
+                      onClick={(e) => {
+                        openModal();
+                      }}
+                    >
+                      Start your interest payment💵
+                    </Button>
+                  )}
+                </SuperfluidWidget>
+              ) : (
+                <div>
+                  <Link href="BorrowHistory"> Check your Loan details</Link>
+                </div>
+              )}
             </>
           );
         }}

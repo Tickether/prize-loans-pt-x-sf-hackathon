@@ -13,29 +13,33 @@ import { useContractRead } from "wagmi";
 import Approve from "@/components/ApproveWeth";
 import { useMyContext } from "@/app/AppContext";
 import PayLoanAmount from "./PayLoanAmount";
+
 import { Button } from "@/components/ui/button";
 import { pweethyABI } from "@/utils/pweethy";
 import { ethers } from "ethers";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 const Page = ({ params }: { params: { loanid: bigint } }) => {
   const { flagLoanpay } = useMyContext();
+
   const [payamount, setPayamount] = React.useState<number>(0);
   const provider = useEthersProvider();
   const signer = useEthersSigner();
-  console.log(params);
+
   const { data, isError, isLoading, isSuccess } = useContractRead({
     address: "0x4ec74b34dd8190f02e7d13e00393716981b2bade",
     abi: pweethyABI,
     functionName: "borrowers",
     args: [params.loanid],
   });
+  const [LoadingFlag, setLoadingFlag] = React.useState(false);
+  const [SuccessFlag, setSuccessFlag] = React.useState(false);
   React.useEffect(() => {
     console.log("fowesj");
   }, [data]);
   async function DeleteExistingFlow(recipient: string) {
-    console.log(recipient);
-    console.log(provider);
-    console.log(signer);
+    setLoadingFlag(true);
+
     try {
       if (signer != undefined) {
         const chainId = "420";
@@ -62,13 +66,20 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
 
         const result = await deleteFlowOperation.exec(superSigner);
         console.log(result);
-
+        setSuccessFlag(true);
         return result;
       }
     } catch (error) {
+      toast({
+        title:
+          "We are getting an error.  Check if you have any running Interest Stream or not ",
+        variant: "destructive",
+      });
       console.log(error);
+      setLoadingFlag(false);
     }
   }
+
   if (isLoading) {
     return <div>Your Data is loading. Please Wait .....</div>;
   }
@@ -78,12 +89,11 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   }
 
   if (isSuccess && data) {
-    console.log(data);
     const disbursTime = new Date(Number(data[5]) * 1000);
     const ExpireTime = new Date(Number(data[6]) * 1000);
     return (
       <div className="h-[100vh] flex justify-center mt-[7%]">
-        <div className=" min-w-[60%] flex justify-center items-center flex-col">
+        <div className=" border-solid border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
             Loan Details
           </div>
@@ -98,7 +108,16 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Collateral Amount</TableCell>
+              <TableCell colSpan={3}>Loan Payable Address</TableCell>
+              <TableCell className="text-right">
+                {`${data[4].slice(0, 4)}....${data[4].slice(
+                  data[0].length - 4,
+                  data[0].length
+                )}`}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={3}>Colateral Amount</TableCell>
               <TableCell className="text-right">
                 {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </TableCell>
@@ -116,14 +135,12 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan Payable Address</TableCell>
+              <TableCell colSpan={3}>Remaining Amount </TableCell>
               <TableCell className="text-right">
-                {`${data[4].slice(0, 4)}....${data[4].slice(
-                  data[0].length - 4,
-                  data[0].length
-                )}`}
+                {`${ethers.utils.formatEther(data[2] - data[3])}/weth`}
               </TableCell>
             </TableRow>
+
             <TableRow>
               <TableCell colSpan={3}>Loan Start Date </TableCell>
               <TableCell className="text-right">
@@ -139,21 +156,35 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
           </Table>
           <div className="mt-4 border-solid border-2 flex justify-around flex-col gap-4 w-[50%] p-3 rounded-lg border-blue-400">
             {data[3] >= data[2] ? (
-              <Button
-                variant="success"
-                onClick={() => {
-                  DeleteExistingFlow(data[4]);
-                }}
-              >
-                Stop your Interest Stream. Loan is paid back in full ❤️
-              </Button>
+              <>
+                {!SuccessFlag ? (
+                  <Button
+                    variant="success"
+                    onClick={() => {
+                      DeleteExistingFlow(data[4].toString());
+                    }}
+                  >
+                    {!LoadingFlag
+                      ? "Stop your Interest Stream. Loan is paid back in full ❤️"
+                      : "Loading Wallet...."}
+                  </Button>
+                ) : (
+                  <div className="bg-green-300 p-3 rounded-2xl">
+                    Your Interest Stream has bee successfully stopped
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="flex gap-2 ">
+              <div className="flex gap-2 w-fit ">
                 <div>
                   <Button
                     onClick={(e) => {
                       setPayamount(
-                        Number(ethers.utils.formatEther(data[2].toString()))
+                        Number(
+                          ethers.utils.formatEther(
+                            (data[2] - data[3]).toString()
+                          )
+                        )
                       );
                     }}
                   >
@@ -172,7 +203,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                     }}
                   />
                 </div>
-                <div className="w-[50%]">
+                <div className="w-fit">
                   {!flagLoanpay ? (
                     <Approve amount={BigInt(payamount * 1000000000000000000)} />
                   ) : (
@@ -197,5 +228,5 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
   );
 };
 
-export const runtime = 'edge';
+export const runtime = "edge";
 export default Page;

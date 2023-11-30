@@ -17,13 +17,21 @@ const PayLoanAmount = ({
   });
 
   if (isLoading) {
-    return <div>Loading. Please wait</div>;
+    return <div className="w-fit">Loading. Please wait</div>;
   }
   if (isSuccess) {
     return (
       <div>
-        Payment complete. Please refresh and check your transaction history
-        hash {data?.hash}
+        <Button
+          className="w-full"
+          variant="success"
+          onClick={() => {
+            const link = `https://goerli-optimism.etherscan.io/tx/${data?.hash}`;
+            window.open(link, "_blank");
+          }}
+        >
+          Check transaction
+        </Button>
       </div>
     );
   }

@@ -33,27 +33,23 @@ export default function CardWithForm() {
     token: `0x${"EF9aFd8b3701198cCac6bf55458C38F61C4b55c4"}`,
   });
 
-  const enterMore = React.useCallback(() => {
+  const enterMore = () => {
     toast({
       variant: "destructive",
       title: "Not Enough",
       description: "Please Enter more than Zero",
     });
-  }, [toast]);
-
-  const Zerobalance = React.useCallback(() => {
-    toast({
-      variant: "destructive",
-      title: "Not Enough Balance",
-      description: "Please get some token first by staking in PoolTogether",
-    });
-  }, [toast]);
+  };
 
   React.useEffect(() => {
     if (data?.formatted == "0") {
-      Zerobalance();
+      toast({
+        variant: "destructive",
+        title: "Insufficient Balance",
+        description: "Please get some token first by staking in PoolTogether",
+      });
     }
-  }, [data, Zerobalance]);
+  }, [data, toast]);
 
   function HandleLoan(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.value == "0" || e.target.value == "") {
@@ -170,9 +166,9 @@ export default function CardWithForm() {
                       <div className="flex justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
                         <Label>Yearly Interest </Label>
                         {flag && collatoral ? (
-                          <Label> {intrest.slice(0, 8)} ETH</Label>
+                          <Label> {intrest.slice(0, 8)} ETHx</Label>
                         ) : (
-                          <Label>0 ETH</Label>
+                          <Label>0 ETHx</Label>
                         )}
                       </div>
                     </div>
