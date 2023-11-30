@@ -165,7 +165,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                     }}
                   >
                     {!LoadingFlag
-                      ? " Delete Your Intrest stream All Loan is paid❤️"
+                      ? "Stop your Interest Stream. Loan is paid back in full ❤️"
                       : "Loading Wallet...."}
                   </Button>
                 ) : (
