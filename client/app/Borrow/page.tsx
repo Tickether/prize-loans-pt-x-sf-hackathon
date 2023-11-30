@@ -93,7 +93,7 @@ export default function CardWithForm() {
           <CardHeader>
             <CardTitle>Borrow Against pWETH</CardTitle>
             <CardDescription>
-              you can take as much as 90% of you pWETH
+              You can borrow up to 90% of your pWETH value. Make sure to be aware about the risks of liquidation.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex  flex-row">
@@ -186,7 +186,7 @@ export default function CardWithForm() {
           <div className="min-w-[400px] border-2 flex justify-center max-w-[50%] items-center border-solid border-white">
             <TransactionData
               address={`0x${address?.slice(2)}`}
-              amount={(collatoral * 0.00255).toString()}
+              amount={collatoral * 0.00255}
             />
           </div>
         )}

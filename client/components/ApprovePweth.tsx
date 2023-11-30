@@ -43,7 +43,7 @@ const Approve = React.memo(({ amount }: { amount: number }) => {
       write({
         args: [
           `0x${"E6dD6265Eb872cEF38F969A9bF6a3f41626b0f46"}`,
-          BigInt(amount * 1000001000000000000),
+          BigInt(parseInt((amount * 1000001000000000000 + 1).toString())),
         ],
       });
     }

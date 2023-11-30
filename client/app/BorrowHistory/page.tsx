@@ -86,7 +86,7 @@ const TokenData = ({ num }: { num: bigint }) => {
     return (
       <div
         className={`flex  item-center  ${
-          data[3] >= data[2] ? "bg-blue-400 text-black" : "bg-red-500"
+          data[3] < data[2] ? "bg-blue-400 text-black" : "bg-red-500"
         } h-fit max-w-[80%]  rounded-md border p-4`}
       >
         <div>
@@ -130,7 +130,7 @@ const TokenData = ({ num }: { num: bigint }) => {
             </div>
           </div>
 
-          {data[3] >= data[2] ? (
+          {data[3] < data[2] ? (
             <div className="flex justify-center gap-10  pt-10 ml-[30px] text-xl font-bold ">
               <Link
                 className="border-solid border-2 border-white p-3 rounded-3xl"

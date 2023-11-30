@@ -45,7 +45,7 @@ const Approve = React.memo(({ amount }: { amount: bigint }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center  border-solid border-2 p-2 border-white rounded-2xl">
+      <div className="flex justify-center w-full border-solid border-2 p-2 border-white rounded-2xl">
         Loading......
       </div>
     );

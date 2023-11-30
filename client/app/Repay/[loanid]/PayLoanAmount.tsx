@@ -2,6 +2,7 @@
 import React from "react";
 import { useContractWrite } from "wagmi";
 import { pweethyABI } from "@/utils/pweethy";
+import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 const PayLoanAmount = ({
   amount,
@@ -28,6 +29,11 @@ const PayLoanAmount = ({
           onClick={() => {
             const link = `https://goerli-optimism.etherscan.io/tx/${data?.hash}`;
             window.open(link, "_blank");
+            toast({
+              title:
+                "Your Payment is complete. Please refresh the page and collect collateral",
+              variant: "success",
+            });
           }}
         >
           Check transaction
