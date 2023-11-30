@@ -100,7 +100,7 @@ const TokenData = React.memo(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>LoanPayableAddress</TableCell>
+              <TableCell colSpan={3}>Loan Payable Address</TableCell>
               <TableCell className="text-right">
                 {`${data[4].slice(0, 4)}....${data[4].slice(
                   data[0].length - 4,
@@ -109,7 +109,7 @@ const TokenData = React.memo(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan disburse Time </TableCell>
+              <TableCell colSpan={3}>Loan Start Date </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>
@@ -120,7 +120,7 @@ const TokenData = React.memo(
                 {`${ExpireTime.toString().slice(4, 25)}`}
               </TableCell>
             </TableRow>
-            <TableCaption>Please Start Strem for intrest</TableCaption>
+            <TableCaption>Please Start Stream for interest payment</TableCaption>
           </Table>
           <div className="mt-4 flex justify-center">
             <Superfluid amount={amount} reciver={data[4]} />

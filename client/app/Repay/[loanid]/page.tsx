@@ -125,7 +125,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan disburse Time </TableCell>
+              <TableCell colSpan={3}>Loan Start Date </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>

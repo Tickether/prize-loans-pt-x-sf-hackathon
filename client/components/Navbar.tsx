@@ -18,7 +18,7 @@ export default function Navbar() {
           <Link href={"/"}>Home</Link>
           <Link href={"/Borrow"}>Borrow</Link>
 
-          <Link href={"/BorrowHistory"}>Borrow-History</Link>
+          <Link href={"/BorrowHistory"}>Borrow History</Link>
         </div>
 
         <div className="mr-3">
