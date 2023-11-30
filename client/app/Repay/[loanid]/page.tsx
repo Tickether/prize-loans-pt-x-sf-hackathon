@@ -93,7 +93,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
     const ExpireTime = new Date(Number(data[6]) * 1000);
     return (
       <div className="h-[100vh] flex justify-center mt-[7%]">
-        <div className=" border-solid border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
+        <div className=" border-solid p-4 border-2 border-white rounded-2xl min-w-[60%] flex justify-center items-center flex-col">
           <div className="flex justify-center  text-3xl font-bold">
             Loan Details
           </div>
@@ -157,6 +157,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
           <div className="mt-4 border-solid border-2 flex justify-around flex-col gap-4 w-[50%] p-3 rounded-lg border-blue-400">
             {data[3] >= data[2] ? (
               <>
+                <WithdrawPweth loanId={params.loanid} />
                 {!SuccessFlag ? (
                   <Button
                     variant="default"
@@ -173,7 +174,6 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
                     Your Interest Stream has bee successfully stopped
                   </div>
                 )}
-                <WithdrawPweth loanId={params.loanid} />
               </>
             ) : (
               <div className="flex gap-2 w-fit ">
