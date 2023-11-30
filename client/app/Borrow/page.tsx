@@ -93,7 +93,7 @@ export default function CardWithForm() {
           <CardHeader>
             <CardTitle>Borrow Against pWETH</CardTitle>
             <CardDescription>
-              you can take as much as 90% of you pWETH
+              You can borrow up to 90% of your pWETH value. Make sure to be aware about the risks of liquidation.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex  flex-row">
