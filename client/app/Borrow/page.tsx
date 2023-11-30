@@ -166,9 +166,9 @@ export default function CardWithForm() {
                       <div className="flex justify-between border-solid border-2 m-3 p-3 rounded-2xl border-sky-500">
                         <Label>Yearly Interest </Label>
                         {flag && collatoral ? (
-                          <Label> {intrest.slice(0, 8)} ETH</Label>
+                          <Label> {intrest.slice(0, 8)} ETHx</Label>
                         ) : (
-                          <Label>0 ETH</Label>
+                          <Label>0 ETHx</Label>
                         )}
                       </div>
                     </div>

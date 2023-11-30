@@ -108,7 +108,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>LoanPayableAddress</TableCell>
+              <TableCell colSpan={3}>Loan Payable Address</TableCell>
               <TableCell className="text-right">
                 {`${data[4].slice(0, 4)}....${data[4].slice(
                   data[0].length - 4,
@@ -117,7 +117,7 @@ const Page = ({ params }: { params: { loanid: bigint } }) => {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>ColateralAmount</TableCell>
+              <TableCell colSpan={3}>Colateral Amount</TableCell>
               <TableCell className="text-right">
                 {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </TableCell>
