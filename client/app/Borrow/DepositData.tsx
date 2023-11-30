@@ -88,15 +88,15 @@ const TokenData = React.memo(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>ColateralAmount</TableCell>
+              <TableCell colSpan={3}>Collateral Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[1].toString())}/pWETH`}
+                {`${ethers.utils.formatEther(data[1].toString())} pWETH`}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={3}>Loan Amount</TableCell>
               <TableCell className="text-right">
-                {`${ethers.utils.formatEther(data[2].toString())}/WETH`}
+                {`${ethers.utils.formatEther(data[2].toString())} WETH`}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -109,7 +109,7 @@ const TokenData = React.memo(
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell colSpan={3}>Loan disburs Time </TableCell>
+              <TableCell colSpan={3}>Loan disburse Time </TableCell>
               <TableCell className="text-right">
                 {`${disbursTime.toString().slice(4, 25)}`}
               </TableCell>
